@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TGS.Sms;
 
@@ -11,7 +12,9 @@ namespace RabbitMQTestReceiver
     {
         public ValueTask HandleAsync(SmsContent smsContent)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(JsonSerializer.Serialize(smsContent));
+
+            return ValueTask.CompletedTask;
         }
     }
 }
