@@ -12,7 +12,7 @@ namespace TGS.Sms
         private readonly RabbitMQManager _rabbitMQManager;
         private readonly ISmsContentHandler _handler;
         private readonly ILogger<RabbitMQSmsContentConsumer> _logger;
-        private IModel _channel;
+        private IModel? _channel;
 
         public RabbitMQSmsContentConsumer(
             RabbitMQManager rabbitMQManager,
@@ -56,12 +56,12 @@ namespace TGS.Sms
                     .HandleAsync(new SmsContent(shortMessage.Currency, shortMessage.Destination, shortMessage.Content))
                     .ConfigureAwait(false);
 
-                _channel.BasicAck(args.DeliveryTag, false);
+                _channel!.BasicAck(args.DeliveryTag, false);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Receive data fail!");
-                _channel.BasicReject(args.DeliveryTag, true);
+                _channel!.BasicReject(args.DeliveryTag, true);
             }
         }
     }
