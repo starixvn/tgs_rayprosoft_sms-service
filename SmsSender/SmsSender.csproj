@@ -21,7 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\sms.proto" GrpcServices="None" Access="Internal" />
+    <Folder Include="Protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Protos\sms.proto" GrpcServices="None" Access="Internal">
+      <Link>Protos\sms.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>
