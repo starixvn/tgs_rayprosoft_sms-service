@@ -11,6 +11,10 @@ namespace TGS.Sms
         public string UserName { get; set; } = "guest";
 
         public string Password { get; set; } = "guest";
+
+        public string QueueName { get; set; }
+
+        public string ExchangeRouteKey { get; set; }
     }
 }
 

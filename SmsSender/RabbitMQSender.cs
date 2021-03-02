@@ -23,9 +23,9 @@ namespace TGS.Sms
                 Content = message
             };
 
-            _rabbitMQManager.NotifyChannel!.BasicPublish(
-                exchange: string.Empty,
-                routingKey: "sms",
+            _rabbitMQManager.SmsChannel!.BasicPublish(
+                exchange: "amq.direct",
+                routingKey: $"sms.{currency.ToLower()}",
                 mandatory: true,
                 basicProperties: null,
                 body: body.ToByteArray().AsMemory());

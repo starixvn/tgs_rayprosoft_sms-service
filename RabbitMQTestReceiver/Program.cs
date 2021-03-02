@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -13,7 +14,9 @@ namespace RabbitMQTestReceiver
                     services.AddSmsReceiver()
                         .ConfigureOptions((options, sp) =>
                         {
-                            options.RabbitMQUrl = new Uri("amqp://localhost:5672");
+                            var config = sp.GetRequiredService<IConfiguration>();
+
+                            config.GetSection("Sms").Bind(options);
                         })
                         .RegisterHandler<SmsReceiveHandler>();
                 });

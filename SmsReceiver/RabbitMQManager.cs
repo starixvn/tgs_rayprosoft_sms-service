@@ -10,7 +10,7 @@ namespace TGS.Sms
         private readonly IConnection _connection;
         private bool _disposedValue;
 
-        public IModel? NotifyChannel { get; private set; }
+        public IModel? SmsChannel { get; private set; }
 
         public RabbitMQManager(IOptions<SmsOptions> optionsAccessor)
         {
@@ -30,14 +30,21 @@ namespace TGS.Sms
             };
 
             _connection = _factory.CreateConnection();
-            NotifyChannel = _connection.CreateModel();
+            SmsChannel = _connection.CreateModel();
 
-            NotifyChannel.QueueDeclare(
-                queue: "sms",
+            var queueName = options.QueueName.ToLower();
+
+            SmsChannel.QueueDeclare(
+                queue: queueName,
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
+
+            SmsChannel.QueueBind(
+                queueName,
+                "amq.direct",
+                options.ExchangeRouteKey.ToLower());
         }
 
         public void Dispose()
@@ -53,9 +60,9 @@ namespace TGS.Sms
             {
                 if (disposing)
                 {
-                    NotifyChannel?.Close();
-                    NotifyChannel?.Dispose();
-                    NotifyChannel = null;
+                    SmsChannel?.Close();
+                    SmsChannel?.Dispose();
+                    SmsChannel = null;
 
                     _connection.Close();
                     _connection.Dispose();
