@@ -1,6 +1,6 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -26,9 +26,11 @@ namespace TGS.SmsService
                     });
             });
 
-            services.AddSmsSender(options =>
+            services.AddSmsSender((options, sp) =>
             {
-                options.RabbitMQUrl = new Uri("amqp://localhost:5672");
+                var config = sp.GetRequiredService<IConfiguration>();
+
+                config.GetSection("Sms").Bind(options);
             });
         }
 
