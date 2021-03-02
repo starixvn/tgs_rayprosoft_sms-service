@@ -12,6 +12,7 @@ namespace TGS.Sms
         private readonly RabbitMQManager _rabbitMQManager;
         private readonly ISmsContentHandler _handler;
         private readonly ILogger<RabbitMQSmsContentConsumer> _logger;
+        private IModel _channel;
 
         public RabbitMQSmsContentConsumer(
             RabbitMQManager rabbitMQManager,
@@ -25,21 +26,21 @@ namespace TGS.Sms
 
         public ValueTask StartReceiveAsync()
         {
-            var channel = _rabbitMQManager.NotifyChannel;
+            _channel = _rabbitMQManager.NotifyChannel!;
 
-            channel!.QueueDeclare(
+            _channel.QueueDeclare(
                 queue: "sms",
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
 
-            var consumer = new AsyncEventingBasicConsumer(channel);
+            var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += OnMessageReceivedAsync;
 
-            channel.BasicConsume(
+            _channel.BasicConsume(
                 queue: "sms",
-                autoAck: true,
+                autoAck: false,
                 consumer: consumer);
 
             return ValueTask.CompletedTask;
@@ -54,10 +55,13 @@ namespace TGS.Sms
                 await _handler
                     .HandleAsync(new SmsContent(shortMessage.Currency, shortMessage.Destination, shortMessage.Content))
                     .ConfigureAwait(false);
+
+                _channel.BasicAck(args.DeliveryTag, false);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Receive data fail!");
+                _channel.BasicReject(args.DeliveryTag, true);
             }
         }
     }
