@@ -1,0 +1,68 @@
+﻿using System;
+using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
+
+namespace TGS.Sms
+{
+    internal class RabbitMQManager : IDisposable
+    {
+        private readonly ConnectionFactory _factory;
+        private readonly IConnection _connection;
+        private bool _disposedValue;
+
+        public IModel? NotifyChannel { get; private set; }
+
+        public RabbitMQManager(IOptions<SmsOptions> optionsAccessor)
+        {
+            if (optionsAccessor is null)
+            {
+                throw new ArgumentNullException(nameof(optionsAccessor));
+            }
+
+            var options = optionsAccessor.Value;
+
+            _factory = new ConnectionFactory()
+            {
+                Uri = options.RabbitMQUrl,
+                UserName = options.UserName,
+                Password = options.Password,
+                DispatchConsumersAsync = true
+            };
+
+            _connection = _factory.CreateConnection();
+            NotifyChannel = _connection.CreateModel();
+
+            NotifyChannel.QueueDeclare(
+                queue: "sms",
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null);
+        }
+
+        public void Dispose()
+        {
+            // 請勿變更此程式碼。請將清除程式碼放入 'Dispose(bool disposing)' 方法
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    NotifyChannel?.Close();
+                    NotifyChannel?.Dispose();
+                    NotifyChannel = null;
+
+                    _connection.Close();
+                    _connection.Dispose();
+                }
+
+                _disposedValue = true;
+            }
+        }
+    }
+}
