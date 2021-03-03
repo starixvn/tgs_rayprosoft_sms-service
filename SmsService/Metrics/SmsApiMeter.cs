@@ -2,13 +2,13 @@
 
 namespace TGS.SmsService.Metrics
 {
-    internal static class SmsApiMetrics
+    internal static class SmsApiMeter
     {
         public static EventSource EventSource { get; }
 
         public static IncrementingEventCounter SendSmsRequestCounter { get; }
 
-        static SmsApiMetrics()
+        static SmsApiMeter()
         {
             EventSource = new EventSource("TGS.SmsService");
 

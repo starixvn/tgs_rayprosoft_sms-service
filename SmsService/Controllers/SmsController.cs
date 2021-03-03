@@ -11,11 +11,12 @@ namespace TGS.SmsService.Controllers
     public class SmsController : ControllerBase
     {
         [HttpPost]
+        [PerformanceCounter(typeof(SmsApiMeter), nameof(SmsApiMeter.IncrementSendSmsRequest))]
         public async Task SendSmsAsync([FromServices] ISmsSender smsSender, [FromBody] SmsViewModel smsContent)
         {
             await smsSender.SendSmsAsync(smsContent.Currency, smsContent.Destination, smsContent.Message).ConfigureAwait(false);
 
-            SmsApiMetrics.IncrementSendSmsRequest();
+            //SmsApiMetrics.IncrementSendSmsRequest();
 
             //var client = new Client(new Credentials("112b1a8ac175bab43037e2e4e4542c69", "2c7aa3b02677703b58d8543c43ceacca"));
 

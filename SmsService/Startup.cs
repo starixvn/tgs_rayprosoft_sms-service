@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TGS.SmsService.Metrics;
+using OpenTelemetry.Trace;
+using OpenTelemetry;
 
 namespace TGS.SmsService
 {
@@ -14,9 +16,20 @@ namespace TGS.SmsService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            SmsApiMetrics.Init();
+            SmsApiMeter.Init();
 
-            services.AddControllers();
+            services.AddOpenTelemetryTracing(builder =>
+                builder
+                    .AddAspNetCoreInstrumentation()
+                    .AddSource("TGS.*")
+                    .AddConsoleExporter()
+                    .AddProcessor(new SimpleActivityExportProcessor(new PerformanceCounterExporter())));
+
+            services.AddControllers()
+                .AddMvcOptions(options =>
+                {
+                    options.Filters.Add<ControllerDiagnosticsFilter>();
+                });
 
             services.AddSwaggerGen(options =>
             {
