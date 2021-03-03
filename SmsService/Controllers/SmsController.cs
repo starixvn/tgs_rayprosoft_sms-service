@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TGS.Sms;
+using TGS.SmsService.Metrics;
 using TGS.SmsService.ViewModels;
 
 namespace TGS.SmsService.Controllers
@@ -13,6 +14,9 @@ namespace TGS.SmsService.Controllers
         public async Task SendSmsAsync([FromServices] ISmsSender smsSender, [FromBody] SmsViewModel smsContent)
         {
             await smsSender.SendSmsAsync(smsContent.Currency, smsContent.Destination, smsContent.Message).ConfigureAwait(false);
+
+            SmsApiMetrics.IncrementSendSmsRequest();
+
             //var client = new Client(new Credentials("112b1a8ac175bab43037e2e4e4542c69", "2c7aa3b02677703b58d8543c43ceacca"));
 
             //var response = await client.SMS.SMSSend(new

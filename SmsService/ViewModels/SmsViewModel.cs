@@ -3,5 +3,6 @@
     public record SmsViewModel(
         string Destination,
         string Message,
-        string Currency);
+        string Currency,
+        string Brand);
 }

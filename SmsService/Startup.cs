@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TGS.SmsService.Metrics;
 
 namespace TGS.SmsService
 {
@@ -13,6 +14,8 @@ namespace TGS.SmsService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            SmsApiMetrics.Init();
+
             services.AddControllers();
 
             services.AddSwaggerGen(options =>
@@ -32,6 +35,8 @@ namespace TGS.SmsService
 
                 config.GetSection("Sms").Bind(options);
             });
+
+            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +59,7 @@ namespace TGS.SmsService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/healthz");
             });
         }
     }
