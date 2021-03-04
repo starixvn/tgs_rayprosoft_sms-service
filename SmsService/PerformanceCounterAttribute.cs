@@ -5,7 +5,7 @@ namespace TGS.SmsService
 {
     public class PerformanceCounterAttribute : ActionFilterAttribute
     {
-        public Action CountAction { get; }
+        internal Action CountAction { get; }
 
         public PerformanceCounterAttribute(Type meterType, string methodName)
         {

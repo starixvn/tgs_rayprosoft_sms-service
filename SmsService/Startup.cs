@@ -42,7 +42,7 @@ namespace TGS.SmsService
                     });
             });
 
-            services.AddSmsSender((options, sp) =>
+            services.AddSmsServiceCore((options, sp) =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
 

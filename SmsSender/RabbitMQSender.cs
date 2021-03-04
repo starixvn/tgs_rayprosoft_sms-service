@@ -14,13 +14,18 @@ namespace TGS.Sms
             _rabbitMQManager = rabbitMQManager ?? throw new ArgumentNullException(nameof(rabbitMQManager));
         }
 
-        public ValueTask SendSmsAsync(string currency, string destination, string message)
+        public ValueTask SendSmsAsync(
+            string brand,
+            string currency,
+            string destination,
+            string message)
         {
             var body = new ShortMessage()
             {
                 Currency = currency,
                 Destination = destination,
-                Content = message
+                Content = message,
+                Brand = brand
             };
 
             _rabbitMQManager.SmsChannel!.BasicPublish(

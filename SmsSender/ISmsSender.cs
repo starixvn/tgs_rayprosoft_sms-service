@@ -4,6 +4,6 @@ namespace TGS.Sms
 {
     public interface ISmsSender
     {
-        ValueTask SendSmsAsync(string currency, string destination, string message);
+        ValueTask SendSmsAsync(string brand, string currency, string destination, string message);
     }
 }

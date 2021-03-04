@@ -7,4 +7,5 @@ message ShortMessage {
     string destination = 1;
     string content = 2;
     string currency = 3;
+    string brand = 4;
 }
