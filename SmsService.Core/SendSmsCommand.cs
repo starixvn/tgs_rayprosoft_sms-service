@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using TGS.Sms;
 using Valhalla.Services;
 
@@ -8,10 +9,12 @@ namespace TGS.SmsService
     internal class SendSmsCommand : ICommandService<SmsContent>
     {
         private readonly ISmsSender _smsSender;
+        private readonly ILogger<SendSmsCommand> _logger;
 
-        public SendSmsCommand(ISmsSender smsSender)
+        public SendSmsCommand(ISmsSender smsSender, ILogger<SendSmsCommand> logger)
         {
             _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async ValueTask ExecuteAsync(SmsContent command)
@@ -21,6 +24,22 @@ namespace TGS.SmsService
                 command.Currency,
                 command.Destination,
                 command.Message).ConfigureAwait(false);
+
+            _logger.Log(
+                LogLevel.Information,
+                new EventId(10000, "SmsSendLog"),
+                new
+                {
+                    command.Brand,
+                    command.Currency,
+                    command.Destination,
+                    command.Message
+                },
+                null,
+                (state, ex) => $"[{nameof(command.Brand)}]{command.Brand}, " +
+                    $"[{nameof(command.Currency)}]{command.Currency}, " +
+                    $"[{nameof(command.Destination)}]{command.Destination}, " +
+                    $"[{nameof(command.Message)}]{command.Message}");
         }
     }
 }

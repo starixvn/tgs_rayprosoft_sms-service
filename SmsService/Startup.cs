@@ -22,7 +22,6 @@ namespace TGS.SmsService
                 builder
                     .AddAspNetCoreInstrumentation()
                     .AddSource("TGS.*")
-                    .AddConsoleExporter()
                     .AddProcessor(new SimpleActivityExportProcessor(new PerformanceCounterExporter())));
 
             services.AddControllers()
