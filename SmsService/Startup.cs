@@ -71,7 +71,7 @@ namespace TGS.SmsService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/health");
             });
         }
     }
