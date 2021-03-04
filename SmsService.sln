@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{664F1F63-C1B4-444A-88B7-AB6B4BB6CAE9}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsSender", "SmsSender\SmsSender.csproj", "{5EEFC863-8177-4FA5-B75C-F4CC8DE2E8AD}"
@@ -16,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQTestReceiver", "Rab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsReceiver", "SmsReceiver\SmsReceiver.csproj", "{D2594EC8-35E6-4A5F-9110-996D9DD2E58E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsService.Core", "SmsService.Core\SmsService.Core.csproj", "{9C384E6F-DEE4-4FBD-A4DC-154CC108E45D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsService.Core", "SmsService.Core\SmsService.Core.csproj", "{9C384E6F-DEE4-4FBD-A4DC-154CC108E45D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
