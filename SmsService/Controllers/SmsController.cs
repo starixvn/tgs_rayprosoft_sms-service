@@ -24,6 +24,7 @@ namespace TGS.SmsService.Controllers
         /// <param name="shortMessage">The short message.</param>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [SuccessStatusCode(StatusCodes.Status202Accepted)]
         [PerformanceCounter(typeof(SmsApiMeter), nameof(SmsApiMeter.IncrementSendSmsRequest))]
         public async Task SendSmsAsync([FromServices] ICommandService<SmsContent> sendSmsCommand, [FromBody] SmsViewModel shortMessage)
         {
