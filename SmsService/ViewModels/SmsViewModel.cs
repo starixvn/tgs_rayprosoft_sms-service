@@ -1,4 +1,6 @@
-﻿namespace TGS.SmsService.ViewModels
+﻿using System;
+
+namespace TGS.SmsService.ViewModels
 {
     /// <summary>
     /// The sms content view model.
@@ -7,5 +9,5 @@
         string Destination,
         string Message,
         string Currency,
-        string Brand);
+        Guid BrandId);
 }

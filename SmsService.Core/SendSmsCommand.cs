@@ -20,7 +20,7 @@ namespace TGS.SmsService
         public async ValueTask ExecuteAsync(SmsContent command)
         {
             await _smsSender.SendSmsAsync(
-                command.Brand,
+                command.BrandId,
                 command.Currency,
                 command.Destination,
                 command.Message).ConfigureAwait(false);
@@ -30,13 +30,13 @@ namespace TGS.SmsService
                 new EventId(10000, "SmsSendLog"),
                 new
                 {
-                    command.Brand,
+                    command.BrandId,
                     command.Currency,
                     command.Destination,
                     command.Message
                 },
                 null,
-                (state, ex) => $"[{nameof(command.Brand)}]{command.Brand}, " +
+                (state, ex) => $"[{nameof(command.BrandId)}]{command.BrandId}, " +
                     $"[{nameof(command.Currency)}]{command.Currency}, " +
                     $"[{nameof(command.Destination)}]{command.Destination}, " +
                     $"[{nameof(command.Message)}]{command.Message}");
