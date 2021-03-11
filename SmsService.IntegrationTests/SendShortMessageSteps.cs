@@ -47,19 +47,19 @@ namespace TGS.SmsService.IntegrationTests
             _smsServiceClient = new SmsServiceClient(smsServiceHost.GetTestClient());
         }
 
-        [Given(@"my brandId is (.*)")]
+        [Given(@"my brandId is ""(.*)""")]
         public void GivenMyBrandId(Guid brandId)
         {
             _context.Add("brandId", brandId);
         }
 
-        [Given(@"my currency is (.*)")]
+        [Given(@"my currency is ""(.*)""")]
         public void GivenMyCurrency(string currency)
         {
             _context.Add("currency", currency);
         }
 
-        [Given(@"my phone number is (.*)")]
+        [Given(@"my phone number is ""(.*)""")]
         public void GivenMyPhoneNumberIs(string phone)
         {
             _context.Add("phone", phone);
