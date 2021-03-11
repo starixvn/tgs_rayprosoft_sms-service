@@ -12,6 +12,8 @@ namespace TGS.Sms
 
         public string Password { get; set; } = "guest";
 
+        public string VirtualHost { get; set; } = "/";
+
         public string QueueName { get; set; }
 
         public string ExchangeRouteKey { get; set; }
