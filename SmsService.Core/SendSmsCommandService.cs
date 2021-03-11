@@ -6,12 +6,12 @@ using Valhalla.Services;
 
 namespace TGS.SmsService
 {
-    internal class SendSmsCommand : ICommandService<SmsContent>
+    internal class SendSmsCommandService : ICommandService<SmsContent>
     {
         private readonly ISmsSender _smsSender;
-        private readonly ILogger<SendSmsCommand> _logger;
+        private readonly ILogger<SendSmsCommandService> _logger;
 
-        public SendSmsCommand(ISmsSender smsSender, ILogger<SendSmsCommand> logger)
+        public SendSmsCommandService(ISmsSender smsSender, ILogger<SendSmsCommandService> logger)
         {
             _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

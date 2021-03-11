@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Action<SmsOptions, IServiceProvider> configureSmsSender)
         {
             return services
-                .AddTransient<ICommandService<SmsContent>, SendSmsCommand>()
+                .AddTransient<ICommandService<SmsContent>, SendSmsCommandService>()
                 .AddSmsSender(configureSmsSender);
         }
     }
