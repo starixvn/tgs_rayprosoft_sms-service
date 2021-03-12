@@ -26,6 +26,7 @@ namespace TGS.Sms
                 Uri = options.RabbitMQUrl,
                 UserName = options.UserName,
                 Password = options.Password,
+                VirtualHost = options.VirtualHost,
                 DispatchConsumersAsync = true
             };
 

@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>TGS.SmsService.Clients</RootNamespace>
+  </PropertyGroup>
+
+</Project>

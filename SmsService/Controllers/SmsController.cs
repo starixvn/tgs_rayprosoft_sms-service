@@ -33,7 +33,7 @@ namespace TGS.SmsService.Controllers
                     shortMessage.Destination,
                     shortMessage.Message,
                     shortMessage.Currency,
-                    shortMessage.Brand)).ConfigureAwait(false);
+                    shortMessage.BrandId)).ConfigureAwait(false);
 
             //var client = new Client(new Credentials("112b1a8ac175bab43037e2e4e4542c69", "2c7aa3b02677703b58d8543c43ceacca"));
 

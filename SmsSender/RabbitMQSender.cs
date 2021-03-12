@@ -15,7 +15,7 @@ namespace TGS.Sms
         }
 
         public ValueTask SendSmsAsync(
-            string brand,
+            Guid brandId,
             string currency,
             string destination,
             string message)
@@ -25,7 +25,7 @@ namespace TGS.Sms
                 Currency = currency,
                 Destination = destination,
                 Content = message,
-                Brand = brand
+                Brand = brandId.ToString()
             };
 
             _rabbitMQManager.SmsChannel!.BasicPublish(

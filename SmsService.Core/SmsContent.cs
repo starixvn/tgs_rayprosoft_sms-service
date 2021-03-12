@@ -1,8 +1,10 @@
-﻿namespace TGS.SmsService
+﻿using System;
+
+namespace TGS.SmsService
 {
     public record SmsContent(
         string Destination,
         string Message,
         string Currency,
-        string Brand);
+        Guid BrandId);
 }
