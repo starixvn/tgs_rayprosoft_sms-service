@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using TGS.Sms.Protos;
 
-namespace TGS.Sms
+namespace TGS.SmsSender
 {
     internal class RabbitMQSender : ISmsSender
     {

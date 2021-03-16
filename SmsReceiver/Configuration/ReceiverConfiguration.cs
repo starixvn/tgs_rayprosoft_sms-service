@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TGS.Sms.Configuration
+namespace TGS.SmsReceiver.Configuration
 {
     public class ReceiverConfiguration
     {

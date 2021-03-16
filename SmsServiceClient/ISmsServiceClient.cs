@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace TGS.SmsService.Clients
+namespace TGS.SmsService.Client
 {
     public interface ISmsServiceClient
     {

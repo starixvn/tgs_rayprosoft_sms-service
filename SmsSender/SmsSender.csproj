@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>TGS.Sms</RootNamespace>
+    <RootNamespace>TGS.SmsSender</RootNamespace>
     <Nullable>enable</Nullable>
+    <AssemblyName>TGS.SmsSender</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

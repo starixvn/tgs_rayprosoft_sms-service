@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TGS.SmsService
+namespace TGS.SmsService.Core
 {
     public record SmsContent(
         string Destination,

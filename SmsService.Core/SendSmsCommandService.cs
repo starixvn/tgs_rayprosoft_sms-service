@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using TGS.Sms;
-using Valhalla.Services;
+using TGS.ServiceUtility;
+using TGS.SmsSender;
 
-namespace TGS.SmsService
+namespace TGS.SmsService.Core
 {
     internal class SendSmsCommandService : ICommandService<SmsContent>
     {

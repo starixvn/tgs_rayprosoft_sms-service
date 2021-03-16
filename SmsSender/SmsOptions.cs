@@ -2,7 +2,7 @@
 
 using System;
 
-namespace TGS.Sms
+namespace TGS.SmsSender
 {
     public class SmsOptions
     {

@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using TechTalk.SpecFlow;
-using TGS.Sms;
-using TGS.SmsService.Clients;
+using TGS.SmsSender;
+using TGS.SmsService.Client;
 
 namespace TGS.SmsService.IntegrationTests
 {

@@ -2,7 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>TGS.SmsService.Clients</RootNamespace>
+    <RootNamespace>TGS.SmsService.Client</RootNamespace>
+    <PackageId>TGS.SmsServiceClient</PackageId>
+    <Version>0.0.1-alpha</Version>
+    <Authors>Raypro</Authors>
+    <Product>TGS.SmsServiceClient</Product>
+    <PackageProjectUrl>https://gitlab.com/rayprosoft/sms-service</PackageProjectUrl>
+    <RepositoryUrl>https://gitlab.com/rayprosoft/sms-service.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>TGS</PackageTags>
+    <AssemblyName>TGS.SmsServiceClient</AssemblyName>
   </PropertyGroup>
-
 </Project>
