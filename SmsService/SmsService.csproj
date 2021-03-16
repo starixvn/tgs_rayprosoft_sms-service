@@ -8,6 +8,7 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)"</DockerfileBuildArguments>
 		<DockerfileTag Condition="$(DockerfileTag) == ''">sms</DockerfileTag>
+		<AssemblyName>TGS.SmsService</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TGS.SmsReceiver.Microsoft.Extensions.DependencyInjection;
 
-namespace RabbitMQTestReceiver
+namespace TGS.RabbitMQTestReceiver
 {
     internal class Program
     {

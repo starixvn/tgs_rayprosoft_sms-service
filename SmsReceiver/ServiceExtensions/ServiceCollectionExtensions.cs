@@ -1,8 +1,7 @@
-﻿using System;
-using TGS.Sms;
-using TGS.Sms.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using TGS.SmsReceiver.Configuration;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace TGS.SmsReceiver.Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {

@@ -6,6 +6,8 @@
     <IsPackable>false</IsPackable>
 
     <RootNamespace>TGS.SmsService.IntegrationTests</RootNamespace>
+
+    <AssemblyName>TGS.SmsService.IntegrationTests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

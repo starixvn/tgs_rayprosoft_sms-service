@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using TGS.SmsService.Metrics;
 using OpenTelemetry.Trace;
 using OpenTelemetry;
+using TGS.SmsService.Core.ServiceExtensions;
 
 namespace TGS.SmsService
 {

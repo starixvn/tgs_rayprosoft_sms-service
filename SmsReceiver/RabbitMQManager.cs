@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace TGS.Sms
+namespace TGS.SmsReceiver
 {
     internal class RabbitMQManager : IDisposable
     {

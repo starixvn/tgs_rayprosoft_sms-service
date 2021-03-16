@@ -6,7 +6,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using TGS.Sms.Protos;
 
-namespace TGS.Sms
+namespace TGS.SmsReceiver
 {
     internal class RabbitMQSmsContentConsumer : ISmsContentConsumer
     {

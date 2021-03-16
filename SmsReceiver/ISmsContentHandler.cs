@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace TGS.Sms
+namespace TGS.SmsReceiver
 {
     public interface ISmsContentHandler
     {

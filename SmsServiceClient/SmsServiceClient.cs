@@ -5,9 +5,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace TGS.SmsService.Clients
+namespace TGS.SmsService.Client
 {
-    internal class SmsServiceClient : ISmsServiceClient
+    public class SmsServiceClient : ISmsServiceClient
     {
         private readonly static JsonSerializerOptions _JsonSerializerOptions = new JsonSerializerOptions
         {

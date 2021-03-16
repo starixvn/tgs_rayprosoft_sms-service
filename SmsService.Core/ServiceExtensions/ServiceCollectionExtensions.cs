@@ -1,9 +1,10 @@
 ﻿using System;
-using TGS.Sms;
-using TGS.SmsService;
-using Valhalla.Services;
+using Microsoft.Extensions.DependencyInjection;
+using TGS.ServiceUtility;
+using TGS.SmsSender;
+using TGS.SmsSender.ServiceExtensions;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace TGS.SmsService.Core.ServiceExtensions
 {
     public static class ServiceCollectionExtensions
     {
