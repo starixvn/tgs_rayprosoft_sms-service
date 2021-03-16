@@ -49,7 +49,7 @@ pipeline {
 			steps {
 				sh  'dotnet pack SmsReceiver/SmsReceiver.csproj'
 				sh  'dotnet pack SmsServiceClient/SmsServiceClient.csproj'
-				sh  'dotnet nuget push **/*.nupkg --source "gitlab" --skip-duplicate'
+				sh  'dotnet nuget push **/TGS*.nupkg --source "gitlab" --skip-duplicate'
 			}
 		}	
 	}
