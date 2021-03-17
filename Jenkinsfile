@@ -37,14 +37,6 @@ pipeline {
 			}
 		}
 		
-		stage('Pre Nuget') {   
-			steps {
-				timeout(time:1, unit: 'MINUTES') {
-				   input message: "Push to nuget ?"
-				}
-			}
-		}
-		
 		stage('Push Nuget') {   
 			steps {
 				sh  'dotnet pack SmsReceiver/SmsReceiver.csproj'
