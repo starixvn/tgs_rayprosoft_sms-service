@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TGS.SmsService.Client
 {
-    public class SmsServiceClient : ISmsServiceClient
+    internal class SmsServiceClient : ISmsServiceClient
     {
         private readonly static JsonSerializerOptions _JsonSerializerOptions = new JsonSerializerOptions
         {
