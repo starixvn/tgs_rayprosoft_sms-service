@@ -11,6 +11,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddHttpClient<SmsServiceClient>()
                 .ConfigureHttpClient(configureSmsHttpClient)
                 .Services
-                .AddTransient<ISmsServiceClient, SmsServiceClient>();
+                .AddTransient<ISmsServiceClient>(sp => sp.GetRequiredService<SmsServiceClient>());
     }
 }
