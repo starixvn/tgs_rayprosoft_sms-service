@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SmsService.IntegrationTests")]
+[assembly: InternalsVisibleTo("TGS.SmsService.IntegrationTests")]
