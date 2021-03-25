@@ -6,7 +6,9 @@
 		<Nullable>enable</Nullable>
 		<UserSecretsId>91369d7c-b6d3-4c8b-b053-91ef454d74d9</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)"</DockerfileBuildArguments>
+		<GlobalNugetConfig>$(UserProfile)\AppData\Roaming\NuGet\NuGet.Config</GlobalNugetConfig>
+		<GlobalNugetConfig Condition="'$(UserProfile)'==''">~/.nuget/NuGet/NuGet.Config</GlobalNugetConfig>
+		<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)" --secret id=nuget,src="$(GlobalNugetConfig)"</DockerfileBuildArguments>
 		<DockerfileTag Condition="$(DockerfileTag) == ''">sms</DockerfileTag>
 		<AssemblyName>TGS.SmsService</AssemblyName>
 	</PropertyGroup>
