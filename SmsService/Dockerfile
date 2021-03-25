@@ -26,4 +26,4 @@ RUN dotnet publish "SmsService.csproj" -c ${BuildConfiguration} -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SmsService.dll"]
+ENTRYPOINT ["dotnet", "TGS.SmsService.dll"]
