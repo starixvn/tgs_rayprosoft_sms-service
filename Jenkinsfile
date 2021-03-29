@@ -31,8 +31,8 @@ pipeline {
 			steps {
 				script {
 				    sh "sudo docker login registry.gitlab.com -u ${gitlab_user_pwd_USR} -p ${gitlab_user_pwd_PSW}"
-					sh 'sudo docker build -f SmsService/Dockerfile -t registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:dev . --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config"'
-					sh 'sudo docker push registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:dev'
+					sh 'sudo docker build -f SmsService/Dockerfile -t registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:${TAG} . --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config"'
+					sh 'sudo docker push registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:${TAG}'
 				}
 			}
 		}
