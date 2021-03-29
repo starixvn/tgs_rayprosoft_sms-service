@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using TGS.SmsReceiver;
 using TGS.SmsReceiver.Configuration;
 
-namespace TGS.SmsReceiver.Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
@@ -10,7 +10,7 @@ namespace TGS.SmsReceiver.Microsoft.Extensions.DependencyInjection
             var configuration = new ReceiverConfiguration(services);
 
             services
-                .AddOptions<SmsOptions>()
+                .AddOptions<MessageQueueOptions>()
                 .Services
                 .AddSingleton<ISmsContentConsumer, RabbitMQSmsContentConsumer>()
                 .AddSingleton<RabbitMQManager>()

@@ -4,7 +4,7 @@ using System;
 
 namespace TGS.SmsReceiver
 {
-    public class SmsOptions
+    public class MessageQueueOptions
     {
         public Uri RabbitMQUrl { get; set; }
 
@@ -17,6 +17,8 @@ namespace TGS.SmsReceiver
         public string QueueName { get; set; }
 
         public string ExchangeRouteKey { get; set; }
+
+        public string[] SupportCurrencies { get; set; } = Array.Empty<string>();
     }
 }
 

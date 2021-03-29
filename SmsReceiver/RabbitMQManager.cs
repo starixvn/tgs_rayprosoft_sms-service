@@ -12,7 +12,7 @@ namespace TGS.SmsReceiver
 
         public IModel? SmsChannel { get; private set; }
 
-        public RabbitMQManager(IOptions<SmsOptions> optionsAccessor)
+        public RabbitMQManager(IOptions<MessageQueueOptions> optionsAccessor)
         {
             if (optionsAccessor is null)
             {
@@ -42,10 +42,17 @@ namespace TGS.SmsReceiver
                 autoDelete: false,
                 arguments: null);
 
-            SmsChannel.QueueBind(
-                queueName,
-                "amq.direct",
-                options.ExchangeRouteKey.ToLower());
+            if (options.SupportCurrencies.Length > 0)
+            {
+                foreach (var currency in options.SupportCurrencies)
+                {
+                    SmsChannel.QueueBind(
+                        queueName,
+                        "amq.direct",
+                        $"{options.ExchangeRouteKey.ToLower()}.{currency.ToLower()}");
+                }
+            }
+
         }
 
         public void Dispose()

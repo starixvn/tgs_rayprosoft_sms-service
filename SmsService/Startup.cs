@@ -8,6 +8,8 @@ using TGS.SmsService.Metrics;
 using OpenTelemetry.Trace;
 using OpenTelemetry;
 using TGS.SmsService.Core.ServiceExtensions;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace TGS.SmsService
 {
@@ -18,6 +20,13 @@ namespace TGS.SmsService
         public void ConfigureServices(IServiceCollection services)
         {
             SmsApiMeter.Init();
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.0.0.0"), 8));
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+                options.ForwardedHeaders = ForwardedHeaders.All;
+            });
 
             services.AddOpenTelemetryTracing(builder =>
                 builder
@@ -59,6 +68,8 @@ namespace TGS.SmsService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseForwardedHeaders();
 
             app
                 .UseSwagger()
