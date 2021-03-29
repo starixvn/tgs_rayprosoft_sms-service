@@ -18,7 +18,7 @@ namespace TGS.SmsReceiver
 
         public RabbitMQSmsContentConsumer(
             RabbitMQManager rabbitMQManager,
-            IOptions<SmsOptions> optionsAccessor,
+            IOptions<MessageQueueOptions> optionsAccessor,
             ISmsContentHandler handler,
             ILogger<RabbitMQSmsContentConsumer> logger)
         {

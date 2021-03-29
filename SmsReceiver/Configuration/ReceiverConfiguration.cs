@@ -19,10 +19,10 @@ namespace TGS.SmsReceiver.Configuration
             return this;
         }
 
-        public ReceiverConfiguration ConfigureOptions(Action<SmsOptions, IServiceProvider> configure)
+        public ReceiverConfiguration ConfigureOptions(Action<MessageQueueOptions, IServiceProvider> configure)
         {
             Services
-                .AddOptions<SmsOptions>()
+                .AddOptions<MessageQueueOptions>()
                 .Configure(configure);
 
             return this;
