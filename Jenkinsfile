@@ -31,9 +31,15 @@ pipeline {
 			steps {
 				script {
 				    sh "sudo docker login registry.gitlab.com -u ${gitlab_user_pwd_USR} -p ${gitlab_user_pwd_PSW}"
-					sh 'sudo docker build -f SmsService/Dockerfile -t registry.gitlab.com/rayprosoft/turnkey-gaming-system/sms-service:dev . --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config"'
-					sh 'sudo docker push registry.gitlab.com/rayprosoft/turnkey-gaming-system/sms-service:dev'
-					
+					sh 'sudo docker build -f SmsService/Dockerfile -t registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:dev . --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config"'
+					sh 'sudo docker push registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:dev'
+				}
+			}
+		}
+		
+		stage('Deployment') {
+			steps {
+				script {
 					withKubeConfig([credentialsId: 'k8s-kube-config', serverUrl: 'https://192.168.50.105:6443']) {
 						sh "kubectl set image deployment/${Component} ${Component}=${Registry}${Component}:${TAG} --record -n dev"
 					}
