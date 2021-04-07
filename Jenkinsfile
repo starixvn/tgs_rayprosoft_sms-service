@@ -52,7 +52,7 @@ pipeline {
 				sh  'dotnet pack SmsReceiver/SmsReceiver.csproj'
 				sh  'dotnet pack SmsServiceClient/SmsServiceClient.csproj'
 				sh  'dotnet nuget push **/TGS*.nupkg --source "raypro" --skip-duplicate'
-				sh  'dotnet nuget push **/TGS*.nupkg --source "tgsNuget" --skip-duplicate'
+				sh  'dotnet nuget push **/TGS*.nupkg --source "tgs-nuget" --skip-duplicate'
 			}
 		}	
 	}
