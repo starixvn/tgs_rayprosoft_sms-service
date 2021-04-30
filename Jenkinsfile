@@ -2,7 +2,6 @@ pipeline {
 	agent any
 	
 	environment {
-	    Env = "dev"
 		TAG = sh(script: "echo dev-`date +%Y%m%d%H%M`", returnStdout: true).trim()
 		Registry = "registry.gitlab.com/rayprosoft/turnkey-gaming-system/"
 		gitlab_user_pwd = credentials('gitlab-user-pwd')
@@ -35,7 +34,7 @@ pipeline {
 					
 					sh 'sudo docker build -f SmsService/Dockerfile -t registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:${TAG} . --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config"'
 					sh 'sudo docker push registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:${TAG}'
-					sh 'sudo docker push registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:${Env}'
+					sh 'sudo docker push registry.gitlab.com/rayprosoft/turnkey-gaming-system/${Component}:dev'
 				}
 			}
 		}
