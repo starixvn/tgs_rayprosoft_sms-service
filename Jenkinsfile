@@ -9,6 +9,13 @@ pipeline {
 	}
 
 	stages {
+	
+		stage('Clean') {
+            steps {
+                cleanWs()
+            }
+        }
+		
 		stage('Clone') {
 			steps {
 				git branch: "develop", url: 'https://gitlab.com/rayprosoft/sms-service.git' , credentialsId: 'gitlab-user-pwd'
