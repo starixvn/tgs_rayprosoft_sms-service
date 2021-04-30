@@ -33,6 +33,7 @@ pipeline {
 				    sh "sudo docker login registry.gitlab.com -u ${gitlab_user_pwd_USR} -p ${gitlab_user_pwd_PSW}"
 					
 					sh 'sudo docker build -f SmsService/Dockerfile -t ${Registry}${Component}:${TAG} --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config" .'
+					sh 'sudo docker build -f SmsService/Dockerfile -t ${Registry}${Component}:dev --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config" .'
 					sh 'sudo docker push ${Registry}${Component}:${TAG}'
 					sh 'sudo docker push ${Registry}${Component}:dev'
 				}
