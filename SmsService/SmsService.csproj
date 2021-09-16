@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
@@ -7,24 +7,32 @@
 		<UserSecretsId>91369d7c-b6d3-4c8b-b053-91ef454d74d9</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<GlobalNugetConfig>$(UserProfile)\AppData\Roaming\NuGet\NuGet.Config</GlobalNugetConfig>
-		<GlobalNugetConfig Condition="'$(UserProfile)'==''">~/.nuget/NuGet/NuGet.Config</GlobalNugetConfig>
+		<GlobalNugetConfig Condition="'$(UserProfile)'==''">$(HOME)/.nuget/NuGet/NuGet.Config</GlobalNugetConfig>
 		<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)" --secret id=nuget,src="$(GlobalNugetConfig)"</DockerfileBuildArguments>
 		<DockerfileTag Condition="$(DockerfileTag) == ''">sms</DockerfileTag>
 		<AssemblyName>TGS.SmsService</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
-		<PackageReference Include="OpenTelemetry" Version="1.0.1" />
-		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.0.1" />
-		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc2" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc2" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc2" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.10.56">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+		<PackageReference Include="OpenTelemetry" Version="1.1.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.1.0" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc7" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc7" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc7" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
+		<PackageReference Include="Tgs.MessageQueue.RabbitMQ" Version="0.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\SmsService.Core\SmsService.Core.csproj" />
+		<ProjectReference Include="..\SmsService.Repositories\SmsService.Repositories.csproj" />
+		<ProjectReference Include="..\Tgs.WebApi.Toolkits\Tgs.WebApi.Toolkits.csproj" />
 	</ItemGroup>
 
 </Project>

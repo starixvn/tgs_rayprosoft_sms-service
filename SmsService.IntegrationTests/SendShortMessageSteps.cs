@@ -6,8 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using TechTalk.SpecFlow;
-using TGS.SmsSender;
 using TGS.SmsService.Client;
+using TGS.SmsService;
+using Tgs.SmsService;
+using System.Text.Json;
 
 namespace TGS.SmsService.IntegrationTests
 {
@@ -28,6 +30,15 @@ namespace TGS.SmsService.IntegrationTests
             var fakeSender = Substitute.For<ISmsSender>();
             _context.Add("smsSender", fakeSender);
 
+            var fakeTgsRepository = Substitute.For<ITgsRepository>();
+
+            fakeTgsRepository.GetBrandInfoByIdAsync(Arg.Any<Guid>())
+                .Returns(new BrandInfo(
+                    Guid.NewGuid(),
+                    true,
+                    "Test",
+                    JsonDocument.Parse("{}")));
+
             var smsServiceHost = Host.CreateDefaultBuilder(Array.Empty<string>())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -37,7 +48,8 @@ namespace TGS.SmsService.IntegrationTests
                         .ConfigureTestServices(services =>
                         {
                             services
-                                .AddTransient(sp => fakeSender);
+                                .AddTransient(sp => fakeSender)
+                                .AddTransient(sp => fakeTgsRepository);
                         });
                 })
                 .Build();
@@ -53,12 +65,6 @@ namespace TGS.SmsService.IntegrationTests
             _context.Add("brandId", brandId);
         }
 
-        [Given(@"my currency is ""(.*)""")]
-        public void GivenMyCurrency(string currency)
-        {
-            _context.Add("currency", currency);
-        }
-
         [Given(@"my phone number is ""(.*)""")]
         public void GivenMyPhoneNumberIs(string phone)
         {
@@ -69,23 +75,24 @@ namespace TGS.SmsService.IntegrationTests
         public async Task WhenSendShortMessageAsync()
         {
             var brandId = _context.Get<Guid>("brandId");
-            var currency = _context.Get<string>("currency");
             var phone = _context.Get<string>("phone");
 
-            await _smsServiceClient.SendShortMessageAsync(phone, "test message", currency, brandId);
+            await _smsServiceClient.SendShortMessageAsync(phone, "test message", brandId);
         }
 
         [Then(@"the request will queued")]
         public void ThenTheRequestWillQueued()
         {
             var brandId = _context.Get<Guid>("brandId");
-            var currency = _context.Get<string>("currency");
             var phone = _context.Get<string>("phone");
             var fakeSender = _context.Get<ISmsSender>("smsSender");
 
-            fakeSender
+            _ = fakeSender
                 .Received(1)
-                .SendSmsAsync(Arg.Is(brandId), Arg.Is(currency), Arg.Is(phone), Arg.Any<string>());
+                .SendSmsAsync(
+                    Arg.Is("test"),
+                    Arg.Is(phone),
+                    Arg.Any<string>());
         }
     }
 }

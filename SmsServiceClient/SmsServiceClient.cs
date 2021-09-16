@@ -21,13 +21,12 @@ namespace TGS.SmsService.Client
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public async ValueTask SendShortMessageAsync(string phone, string message, string currency, Guid brandId)
+        public async ValueTask SendShortMessageAsync(string phone, string message, Guid brandId)
         {
             var postData = new
             {
                 Destination = phone,
                 Message = message,
-                Currency = currency,
                 BrandId = brandId
             };
 

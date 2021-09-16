@@ -1,68 +1,168 @@
+def message = "";
+
 pipeline {
 	agent any
 	
 	environment {
-		TAG = sh(script: "echo dev-`date +%Y%m%d%H%M`", returnStdout: true).trim()
-		Registry = "registry.gitlab.com/rayprosoft/turnkey-gaming-system/"
-		gitlab_user_pwd = credentials('gitlab-user-pwd')
-		Component = "sms-service"
+		BuildConfiguration = 'Debug'
+		ImageName = "registry.gitlab.com/rayprosoft/turnkey-gaming-system/sms-service"
 	}
 
 	stages {
-	
-		stage('Clean') {
+		stage('Prepare') {
             steps {
-                cleanWs()
+                sh "echo 'Branch: $GIT_BRANCH'";
+                script {
+                    switch(env.GIT_BRANCH)
+                    {
+                        case ['origin/main','main']:
+                            env.kube_ns = "prod";
+                            env.k8s_config = 'stag-k8s-config';
+                            break;
+                        case ['origin/release','release']:
+                            env.kube_ns = "staging";
+                            env.k8s_config = 'stag-k8s-config';
+                            break;
+                        default:
+                            env.kube_ns = "dev";
+                            env.k8s_config = 'k8s-kube-config' 
+                            break;
+                    }
+                }
+                configFileProvider([
+                    configFile(fileId: 'tgs.' + env.kube_ns , variable: 'tgsconfig')]) {
+                        script {
+                            def envItems = readProperties file: "$tgsconfig";
+                            envItems.each { key, value -> env."tgs_${key}" = value;
+                        }
+                        env.TAG = sh(script: "echo `date +%Y%m%d%H%M`", returnStdout: true).trim() + '-' + env.kube_ns;
+                        message += "\nBranch: ${env.GIT_BRANCH}" 
+                        message += "\nTag: ${env.TAG}"
+                        message += "\nEnv: ${env.kube_ns}"
+                        env.commit_url = "${env.GIT_URL}".replace("git@gitlab.com:","https://gitlab.com/").replace(".git","/-/commit/") + "${env.GIT_COMMIT}"
+                        message += "\n Commit: ${env.commit_url}"
+                    }
+                }
+                sh "echo tag: $TAG"
+            }
+        }
+
+		stage('Build') {
+            steps {
+                sh 'dotnet build -c $BuildConfiguration'
             }
         }
 		
-		stage('Clone') {
-			steps {
-				git branch: "develop", url: 'https://gitlab.com/rayprosoft/sms-service.git' , credentialsId: 'gitlab-user-pwd'
-			}
-		}
-	
-		stage('Build') {
-			steps {
-				sh "dotnet build SmsService.sln"
-			}
-		}
-		
 		stage('Test') {
 			steps {
-				sh  "dotnet test SmsService.sln"  
+				sh 'dotnet test -c $BuildConfiguration --logger trx --no-build'
 			}
 		}
-		
-		stage('Docker Image') {
+
+		stage('Push packages') {
 			steps {
-				script {
-				    sh "sudo docker login registry.gitlab.com -u ${gitlab_user_pwd_USR} -p ${gitlab_user_pwd_PSW}"
-					
-					sh 'sudo docker build -f SmsService/Dockerfile -t ${Registry}${Component}:${TAG} --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config" .'
-					sh 'sudo docker build -f SmsService/Dockerfile -t ${Registry}${Component}:dev --secret id=nuget,src="/var/lib/jenkins/.nuget/NuGet/NuGet.Config" .'
-					sh 'sudo docker push ${Registry}${Component}:${TAG}'
-					sh 'sudo docker push ${Registry}${Component}:dev'
+				sh 'dotnet pack -c $BuildConfiguration "SmsReceiver/SmsReceiver.csproj" --no-build'
+				sh 'dotnet pack -c $BuildConfiguration "SmsServiceClient/SmsServiceClient.csproj" --no-build'
+				sh 'dotnet nuget push "SmsReceiver/bin/$BuildConfiguration/*.nupkg" --source "raypro" --skip-duplicate'
+				sh 'dotnet nuget push "SmsServiceClient/bin/$BuildConfiguration/*.nupkg" --source "raypro" --skip-duplicate'
+			}
+		}
+
+		stage('Build Docker Image') {
+			steps {
+				sh 'dotnet build "SmsService/SmsService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:$TAG" --no-restore '
+			}
+		}
+
+		stage('Push Docker Image') {
+			steps {
+				sh 'sudo docker push $ImageName:$TAG'
+			}
+		}
+
+		stage('Deploy') {
+            when {
+                expression {
+                    return env.kube_ns == 'prod';
+                }
+            }
+
+            steps {
+                script {
+                    input message: 'Ready to go?', ok: 'yes';
+                }
+                
+                sh "echo start deploy"
+            }
+        }
+		
+		stage('Deploy to k8s') {
+			steps {
+				withKubeConfig([credentialsId: env.k8s_config]) {
+					sh '''
+						helm template deployment/k8s/sms-api \
+							--set image.tag=${TAG} \
+							--set namespace=${kube_ns} \
+							--set connectionStrings.tgs="$tgs_tgs" \
+							--set rabbit.url="$tgs_rabbit_url"
+					'''
+					sh '''
+						helm template deployment/k8s/sms-api \
+							--set image.tag=${TAG} \
+							--set namespace=${kube_ns} \
+							--set connectionStrings.tgs="$tgs_tgs" \
+							--set rabbit.url="$tgs_rabbit_url" | kubectl -n ${kube_ns} apply -f -
+					'''
 				}
 			}
 		}
 		
-		stage('Deployment') {
-			steps {
-				script {
-					withKubeConfig([credentialsId: 'k8s-kube-config', serverUrl: 'https://192.168.50.105:6443']) {
-						sh "kubectl set image deployment/${Component} ${Component}=${Registry}${Component}:${TAG} --record -n dev"
-					}
-				}
-			}
-		}
-		
-		stage('Push Nuget') {   
-			steps {
-				sh  'dotnet pack SmsReceiver/SmsReceiver.csproj'
-				sh  'dotnet pack SmsServiceClient/SmsServiceClient.csproj'
-				sh  'dotnet nuget push **/TGS*.nupkg --source "raypro" --skip-duplicate'
-			}
-		}	
+		stage('Add Tag on Prod') {
+            when {
+                expression {
+                    return env.kube_ns == 'prod';
+                }
+            }			
+            steps {	
+				sshagent(['ssh-jenkins']) {
+                    sh "git tag -a ${TAG} -m ${TAG}"
+                    sh "git push ${GIT_URL} ${TAG} HEAD:${GIT_BRANCH}"
+                }
+            }
+        }
+
+		stage('Remove Image Tags') {					
+            steps {	
+                withCredentials([string(credentialsId: "GitLabToken", variable: "GitLabToken")]) {					
+                    sh "curl --request DELETE --data \'name_regex_delete=.*\' --data \'keep_n=10\' --header \'PRIVATE-TOKEN: ${GitLabToken}\' ${ImageTagUrl}"
+                }
+            }
+        }
 	}
+
+	post {
+		always {
+			step([$class: 'MSTestPublisher', testResultsFile:"**/*.trx", failOnError: false, keepLongStdio: true])
+		}
+		success {
+             sendTelegram("Pipeline: ${currentBuild.fullDisplayName} OK! ${message} \n${currentBuild.getBuildCauses()[0].shortDescription}\n")
+        }
+        failure {
+            sendTelegram("<b>Failed Pipeline:</b> ${currentBuild.fullDisplayName} Something is wrong with ${env.BUILD_URL}/console\n${currentBuild.getBuildCauses()[0].shortDescription}\n")
+        }
+	}
+}
+
+def sendTelegram(message) {
+    def encodedMessage = URLEncoder.encode(message, "UTF-8")
+
+    withCredentials([string(credentialsId: "telegramToken", variable: "TOKEN"), string(credentialsId: "telegramChatId", variable: "CHAT_ID")]) {
+
+        response = httpRequest (consoleLogResponseBody: true,
+                contentType: 'APPLICATION_JSON',
+                httpMode: 'GET',
+                url: "https://api.telegram.org/bot${TOKEN}/sendMessage?text=${encodedMessage}&chat_id=${CHAT_ID}",
+                validResponseCodes: '200')
+        return response
+    }
 }
