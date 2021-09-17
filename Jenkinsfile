@@ -100,14 +100,14 @@ pipeline {
 			steps {
 				withKubeConfig([credentialsId: env.k8s_config]) {
 					sh '''
-						helm template deployment/k8s/sms-api \
+						helm template Deployment/k8s/sms-api \
 							--set image.tag=${TAG} \
 							--set namespace=${kube_ns} \
 							--set connectionStrings.tgs="$tgs_tgs" \
 							--set rabbit.url="$tgs_rabbit_url"
 					'''
 					sh '''
-						helm template deployment/k8s/sms-api \
+						helm template Deployment/k8s/sms-api \
 							--set image.tag=${TAG} \
 							--set namespace=${kube_ns} \
 							--set connectionStrings.tgs="$tgs_tgs" \
