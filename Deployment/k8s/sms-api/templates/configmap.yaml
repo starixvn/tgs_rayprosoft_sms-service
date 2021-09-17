@@ -10,6 +10,9 @@ data:
         "Tgs": "{{ .Values.connectionStrings.tgs }}"
       },
       "Sms": {
-        "RabbitMQUrl": "{{ .Values.rabbit.url }}"
+        "RabbitMQUrl": "{{ .Values.rabbit.url }}",
+        "UserName": "{{ .Values.rabbit.user }}",
+        "Password": "{{ .Values.rabbit.password }}",
+        "VirtualHost": "{{ .Values.rabbit.vhost  }}"
       }
     }

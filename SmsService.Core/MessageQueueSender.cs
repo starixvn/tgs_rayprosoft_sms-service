@@ -15,10 +15,11 @@ namespace Tgs.SmsService
             _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
         }
 
-        public ValueTask SendSmsAsync(string vendorCode, string destination, string message)
+        public ValueTask SendSmsAsync(Guid brandId, string vendorCode, string destination, string message)
         {
             var body = new ShortMessage()
             {
+                BrandId = brandId,
                 Destination = destination,
                 Content = message
             };

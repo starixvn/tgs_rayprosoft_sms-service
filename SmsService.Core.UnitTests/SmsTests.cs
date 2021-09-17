@@ -27,6 +27,7 @@ namespace SmsService.Core.UnitTests
                 logger);
 
             var command = new SendSmsCommand(
+                Guid.NewGuid(),
                 "886988123456",
                 "test",
                 "Test",
@@ -36,6 +37,7 @@ namespace SmsService.Core.UnitTests
 
             _ = fakeSmsSender.Received(1)
                 .SendSmsAsync(
+                    Arg.Is(command.BrandId),
                     Arg.Is(command.VendorCode.ToLower()),
                     Arg.Is(command.Destination),
                     Arg.Is(command.Message));
