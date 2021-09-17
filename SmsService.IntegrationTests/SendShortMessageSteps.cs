@@ -94,6 +94,7 @@ namespace TGS.SmsService.IntegrationTests
             _ = fakeSender
                 .Received(1)
                 .SendSmsAsync(
+                    Arg.Is(brandId),
                     Arg.Is("test"),
                     Arg.Is(phone),
                     Arg.Any<string>());

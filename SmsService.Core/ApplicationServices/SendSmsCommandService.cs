@@ -20,6 +20,7 @@ namespace Tgs.SmsService.ApplicationServices
         public async ValueTask ExecuteAsync(SendSmsCommand command, CancellationToken cancellationToken = default)
         {
             await _smsSender.SendSmsAsync(
+                command.BrandId,
                 command.VendorCode.ToLower(),
                 command.Destination,
                 command.Message).ConfigureAwait(false);

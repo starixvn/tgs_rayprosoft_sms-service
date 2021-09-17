@@ -42,7 +42,7 @@ namespace TGS.SmsService.Controllers
 
             if (brandInfo?.SmsEnabled != true)
             {
-                await this.Fail<Task>(
+                await this.FailAsync(
                     StatusCodes.Status406NotAcceptable,
                     "This brand can't send sms.").ConfigureAwait(false);
 
@@ -51,6 +51,7 @@ namespace TGS.SmsService.Controllers
 
             await sendSmsCommand.ExecuteAsync(
                 new SendSmsCommand(
+                    shortMessage.BrandId,
                     shortMessage.Destination,
                     shortMessage.Message,
                     brandInfo.SmsVendorCode!,

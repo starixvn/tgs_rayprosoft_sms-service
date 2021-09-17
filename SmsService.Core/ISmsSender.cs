@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Tgs.SmsService
 {
     public interface ISmsSender
     {
-        ValueTask SendSmsAsync(string vendorCode, string destination, string message);
+        ValueTask SendSmsAsync(Guid brandId, string vendorCode, string destination, string message);
     }
 }
