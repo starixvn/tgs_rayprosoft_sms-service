@@ -2,8 +2,6 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 ARG BuildConfiguration=Release
@@ -12,16 +10,17 @@ RUN dotnet nuget remove source 'Microsoft Visual Studio Offline Packages' || tru
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["SmsService/SmsService.csproj", "SmsService/"]
+COPY ["Tgs.WebApi.Toolkits/Tgs.WebApi.Toolkits.csproj", "Tgs.WebApi.Toolkits/"]
 COPY ["SmsService.Core/SmsService.Core.csproj", "SmsService.Core/"]
-COPY ["SmsSender/SmsSender.csproj", "SmsSender/"]
+COPY ["SmsService.Repositories/SmsService.Repositories.csproj", "SmsService.Repositories/"]
 RUN dotnet restore "SmsService/SmsService.csproj"
 COPY . .
 WORKDIR "/src/SmsService"
-RUN dotnet build "SmsService.csproj" -c ${BuildConfiguration} -o /app/build
+RUN dotnet build "SmsService.csproj" -c $BuildConfiguration -o /app/build
 
 FROM build AS publish
 ARG BuildConfiguration
-RUN dotnet publish "SmsService.csproj" -c ${BuildConfiguration} -o /app/publish
+RUN dotnet publish "SmsService.csproj" -c $BuildConfiguration -o /app/publish
 
 FROM base AS final
 WORKDIR /app

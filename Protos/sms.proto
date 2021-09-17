@@ -1,11 +1,12 @@
 syntax = "proto3";
 
-option csharp_namespace = "TGS.Sms.Protos";
+option csharp_namespace = "Tgs.Sms.Protos";
 package sms;
+
+import "phoenix/protobuf/guid.proto";
 
 message ShortMessage {
     string destination = 1;
     string content = 2;
-    string currency = 3;
-    string brand = 4;
+    phoenix.protobuf.GuidValue brand_id = 3;
 }
