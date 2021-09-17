@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -6,10 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using TechTalk.SpecFlow;
-using TGS.SmsService.Client;
-using TGS.SmsService;
 using Tgs.SmsService;
-using System.Text.Json;
+using TGS.SmsService.Client;
 
 namespace TGS.SmsService.IntegrationTests
 {
@@ -43,11 +42,16 @@ namespace TGS.SmsService.IntegrationTests
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
+                        .ConfigureAppConfiguration((appCtx, configBuilder) =>
+                        {
+                            configBuilder.Sources.Clear();
+                        })
                         .UseStartup<TGS.SmsService.Startup>()
                         .UseTestServer()
                         .ConfigureTestServices(services =>
                         {
                             services
+                                .AddFakeRabbitMessageQueue()
                                 .AddTransient(sp => fakeSender)
                                 .AddTransient(sp => fakeTgsRepository);
                         });
