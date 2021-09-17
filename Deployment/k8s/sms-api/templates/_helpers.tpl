@@ -41,7 +41,7 @@ Common labels
 Selector labels
 */}}
 {{- define "sms-api.selectorLabels" -}}
-app: {{ include "payment.name" . }}
+app: {{ include "sms-api.name" . }}
 {{- end }}
 
 {{/*
