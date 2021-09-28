@@ -64,8 +64,8 @@ pipeline {
 			steps {
 				sh 'dotnet pack -c $BuildConfiguration "SmsReceiver/SmsReceiver.csproj" --no-build'
 				sh 'dotnet pack -c $BuildConfiguration "SmsServiceClient/SmsServiceClient.csproj" --no-build'
-				sh 'dotnet nuget push "SmsReceiver/bin/$BuildConfiguration/*.nupkg" --source "raypro-nuget" --skip-duplicate'
-				sh 'dotnet nuget push "SmsServiceClient/bin/$BuildConfiguration/*.nupkg" --source "raypro-nuget" --skip-duplicate'
+				sh 'dotnet nuget push "SmsReceiver/bin/$BuildConfiguration/*.nupkg" --source "raypro" --skip-duplicate'
+				sh 'dotnet nuget push "SmsServiceClient/bin/$BuildConfiguration/*.nupkg" --source "raypro" --skip-duplicate'
 			}
 		}
 
