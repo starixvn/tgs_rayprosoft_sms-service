@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Tgs.SmsService;
+using Tgs.SmsService.ApplicationServices;
+using Tgs.WebApi.Toolkits;
+using TGS.ServiceUtility;
 using TGS.SmsService.Metrics;
 using TGS.SmsService.ViewModels;
-using Valhalla.Services;
 
 namespace TGS.SmsService.Controllers
 {
@@ -23,26 +26,36 @@ namespace TGS.SmsService.Controllers
         /// <param name="sendSmsCommand">The send SMS command.</param>
         /// <param name="shortMessage">The short message.</param>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
-        [SuccessStatusCode(StatusCodes.Status202Accepted)]
+        [SuccessStatusCode(StatusCodes.Status202Accepted, "Request queued.")]
+        [FailStatusCode(StatusCodes.Status406NotAcceptable, "Request rejected.")]
         [PerformanceCounter(typeof(SmsApiMeter), nameof(SmsApiMeter.IncrementSendSmsRequest))]
-        public async Task SendSmsAsync([FromServices] ICommandService<SmsContent> sendSmsCommand, [FromBody] SmsViewModel shortMessage)
+        public async Task SendSmsAsync(
+            [FromServices] IGetService<GetBrandInfoQuery, BrandInfo?> getBrandService,
+            [FromServices] ICommandService<SendSmsCommand> sendSmsCommand,
+            [FromBody] SmsViewModel shortMessage)
         {
+            var brandQuery = new GetBrandInfoQuery(shortMessage.BrandId);
+
+            var brandInfo = await getBrandService
+                .GetAsync(brandQuery, HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+
+            if (brandInfo?.SmsEnabled != true)
+            {
+                await this.FailAsync(
+                    StatusCodes.Status406NotAcceptable,
+                    "This brand can't send sms.").ConfigureAwait(false);
+
+                return;
+            }
+
             await sendSmsCommand.ExecuteAsync(
-                new SmsContent(
+                new SendSmsCommand(
+                    shortMessage.BrandId,
                     shortMessage.Destination,
                     shortMessage.Message,
-                    shortMessage.Currency,
-                    shortMessage.Brand)).ConfigureAwait(false);
-
-            //var client = new Client(new Credentials("112b1a8ac175bab43037e2e4e4542c69", "2c7aa3b02677703b58d8543c43ceacca"));
-
-            //var response = await client.SMS.SMSSend(new
-            //{
-            //    origin = "Test",
-            //    destination = smsContent.Destination,
-            //    message = smsContent.Message
-            //});
+                    brandInfo.SmsVendorCode!,
+                    brandInfo.SmsVendorSettings!)).ConfigureAwait(false);
         }
     }
 }

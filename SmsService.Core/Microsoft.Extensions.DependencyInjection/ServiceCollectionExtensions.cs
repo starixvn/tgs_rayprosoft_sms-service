@@ -1,19 +1,18 @@
-﻿using System;
-using TGS.Sms;
-using TGS.SmsService;
-using Valhalla.Services;
+﻿using System.Reflection;
+using Tgs.SmsService;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddSmsServiceCore(
-            this IServiceCollection services,
-            Action<SmsOptions, IServiceProvider> configureSmsSender)
+            this IServiceCollection services)
         {
             return services
-                .AddTransient<ICommandService<SmsContent>, SendSmsCommand>()
-                .AddSmsSender(configureSmsSender);
+                .RegisterAllServiceUtilityTypes(
+                    Assembly.GetExecutingAssembly(),
+                    ServiceLifetime.Transient)
+                .AddTransient<ISmsSender, MessageQueueSender>();
         }
     }
 }
