@@ -10,23 +10,15 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-namespace: dev
-
 imagePullSecrets: 
-  - name: registry-credentials
+  - name: dockerhub
 nameOverride: "sms-service"
 fullnameOverride: "sms-service"
 
-connectionStrings:
-  tgs: Server=localhost;Database=tgs;User Id=tgs;Password=1qaz2wsx!@
-
-rabbit:
-  url: amqp://localhost:5672
-  user: devadmin
-  password: devadmin
-  vhost: /devhost
-
-podAnnotations: {}
+podAnnotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: "52325"
+  prometheus.io/scrape: "true"
 
 podSecurityContext: {}
   # fsGroup: 2000

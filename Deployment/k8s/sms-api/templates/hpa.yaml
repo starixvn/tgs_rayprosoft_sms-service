@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "sms-api.fullname" . }}
-  namespace: {{ .Values.namespace }}
   labels:
     {{- include "sms-api.labels" . | nindent 4 }}
 spec:
