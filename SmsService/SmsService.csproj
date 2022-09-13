@@ -6,9 +6,7 @@
 		<Nullable>enable</Nullable>
 		<UserSecretsId>91369d7c-b6d3-4c8b-b053-91ef454d74d9</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<GlobalNugetConfig>$(UserProfile)\AppData\Roaming\NuGet\NuGet.Config</GlobalNugetConfig>
-		<GlobalNugetConfig Condition="'$(UserProfile)'==''">$(HOME)/.nuget/NuGet/NuGet.Config</GlobalNugetConfig>
-		<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)" --secret id=nuget,src="$(GlobalNugetConfig)"</DockerfileBuildArguments>
+		<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)"</DockerfileBuildArguments>
 		<DockerfileTag Condition="$(DockerfileTag) == ''">sms</DockerfileTag>
 		<AssemblyName>TGS.SmsService</AssemblyName>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -17,8 +15,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.3.44">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.6" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.6" />

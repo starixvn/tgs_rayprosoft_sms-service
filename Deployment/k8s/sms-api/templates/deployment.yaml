@@ -27,30 +27,44 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if eq .Values.namespace "staging" }}
-      nodeSelector:
-        dedicated: nonprod
-      tolerations:
-      - effect: NoSchedule
-        key: dedicated
-        operator: Equal
-        value: nonprod
-      {{- end }}
-      {{- if eq .Values.namespace "prod" }}
-      nodeSelector:
-        dedicated: prod
-      tolerations:
-      - effect: NoSchedule
-        key: dedicated
-        operator: Equal
-        value: prod
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: Sms-Api({{ .Release.Namespace }})
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: ConnectionStrings__Tgs
+              valueFrom:
+                secretKeyRef:
+                  name: tgs-connections
+                  key: tgs
+            - name: Sms__RabbitMQUrl
+              valueFrom:
+                secretKeyRef:
+                  name: tgs-connections
+                  key: rabbitmq-url
+            - name: Sms__UserName
+              valueFrom:
+                secretKeyRef:
+                  name: tgs-connections
+                  key: rabbitmq-user
+            - name: Sms__Password
+              valueFrom:
+                secretKeyRef:
+                  name: tgs-connections
+                  key: rabbitmq-pass
+            - name: Sms__VirtualHost
+              valueFrom:
+                secretKeyRef:
+                  name: tgs-connections
+                  key: rabbitmq-vhost
           ports:
             - name: http
               containerPort: 80
@@ -62,18 +76,58 @@ spec:
               subPath: appsettings.json
           livenessProbe:
             httpGet:
-              path: /health
-              port: http
-          readinessProbe:
+              path: /healthz
+              port: 80
+            periodSeconds: 5
+          startupProbe:
             httpGet:
-              path: /health
-              port: http
+              path: /healthz
+              port: 80
+            periodSeconds: 2
+            failureThreshold: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        - name: monitor
+          image: mcr.microsoft.com/dotnet/monitor:6.0.0
+          args: [ "--no-auth" ]
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DOTNETMONITOR_DiagnosticPort__ConnectionMode
+              value: Listen
+            - name: DOTNETMONITOR_DiagnosticPort__EndpointName
+              value: /diag/port
+            - name: DOTNETMONITOR_Storage__DumpTempFolder
+              value: /dumps
+            - name: DOTNETMONITOR_Urls
+              value: http://+:52324
+            - name: DOTNETMONITOR_Metrics__Endpoints
+              value: http://+:52325
+            - name: XDG_CONFIG_HOME
+              value: /config
+          volumeMounts:
+            - mountPath: /diag
+              name: diagvol
+            - mountPath: /dumps
+              name: dumpsvol
+            - mountPath: /config/dotnet-monitor/settings.json
+              name: appsettings
+              readOnly: true
+              subPath: monitor.settings.json
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
       volumes:
         - name: appsettings
           configMap:
             name: configmap-{{ include "sms-api.fullname" . }}
+        - name: diagvol
+          emptyDir: {}
+        - name: dumpsvol
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
