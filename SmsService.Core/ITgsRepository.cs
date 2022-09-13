@@ -1,10 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿namespace Tgs.SmsService;
 
-namespace Tgs.SmsService
+public interface ITgsRepository
 {
-    public interface ITgsRepository
-    {
-        public ValueTask<BrandInfo?> GetBrandInfoByIdAsync(Guid brandId);
-    }
+    public ValueTask<BrandInfo?> GetBrandInfoByIdAsync(Guid brandId);
 }

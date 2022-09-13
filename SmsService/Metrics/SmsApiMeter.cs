@@ -1,27 +1,26 @@
 ﻿using System.Diagnostics.Tracing;
 
-namespace TGS.SmsService.Metrics
+namespace TGS.SmsService.Metrics;
+
+internal static class SmsApiMeter
 {
-    internal static class SmsApiMeter
+    public static EventSource EventSource { get; }
+
+    public static IncrementingEventCounter SendSmsRequestCounter { get; }
+
+    static SmsApiMeter()
     {
-        public static EventSource EventSource { get; }
+        EventSource = new EventSource("TGS.SmsService");
 
-        public static IncrementingEventCounter SendSmsRequestCounter { get; }
+        SendSmsRequestCounter = new IncrementingEventCounter("SendSmsRequest", EventSource);
+    }
 
-        static SmsApiMeter()
-        {
-            EventSource = new EventSource("TGS.SmsService");
+    public static void Init()
+    {
+    }
 
-            SendSmsRequestCounter = new IncrementingEventCounter("SendSmsRequest", EventSource);
-        }
-
-        public static void Init()
-        {
-        }
-
-        public static void IncrementSendSmsRequest()
-        {
-            SendSmsRequestCounter.Increment();
-        }
+    public static void IncrementSendSmsRequest()
+    {
+        SendSmsRequestCounter.Increment();
     }
 }

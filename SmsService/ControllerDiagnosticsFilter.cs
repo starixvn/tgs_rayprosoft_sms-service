@@ -1,34 +1,30 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace TGS.SmsService
+namespace TGS.SmsService;
+
+public class ControllerDiagnosticsFilter : IAsyncActionFilter
 {
-    public class ControllerDiagnosticsFilter : IAsyncActionFilter
+    private static readonly ActivitySource _ActivitySource = new("TGS.SmsService.Controllers");
+
+    public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        private static readonly ActivitySource _ActivitySource = new ActivitySource("TGS.SmsService.Controllers");
+        using var activity = _ActivitySource.StartActivity(
+            context.ActionDescriptor.DisplayName
+                ?? $"{context.Controller.GetType().FullName}.{context.ActionDescriptor.RouteValues["action"]}");
 
-        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        var counters = context.Filters.OfType<PerformanceCounterAttribute>().ToArray();
+
+        if (counters.Length > 0)
         {
-            using var activity = _ActivitySource.StartActivity(
-                context.ActionDescriptor.DisplayName
-                    ?? $"{context.Controller.GetType().FullName}.{context.ActionDescriptor.RouteValues["action"]}");
-
-            var counters = context.Filters.OfType<PerformanceCounterAttribute>().ToArray();
-
-            if (counters.Length > 0)
+            Action counterAction = () =>
             {
-                Action counterAction = () =>
-                {
-                    for (var i = 0; i < counters.Length; i++)
-                        counters[i].CountAction.Invoke();
-                };
-                activity?.SetCustomProperty("PerformanceCounter", counterAction);
-            }
-
-            return next();
+                for (var i = 0; i < counters.Length; i++)
+                    counters[i].CountAction.Invoke();
+            };
+            activity?.SetCustomProperty("PerformanceCounter", counterAction);
         }
+
+        return next();
     }
 }

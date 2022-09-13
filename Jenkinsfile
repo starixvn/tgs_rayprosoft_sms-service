@@ -1,3 +1,4 @@
+@Library('global-shared-library') _
 def message = "";
 
 pipeline {
@@ -99,28 +100,54 @@ pipeline {
 		
 		stage('Deploy to k8s') {
 			steps {
-				withKubeConfig([credentialsId: env.k8s_config]) {
-					sh '''
-						helm template Deployment/k8s/sms-api \
-							--set image.tag=${TAG} \
-							--set namespace=${kube_ns} \
-							--set connectionStrings.tgs="$tgs_tgs" \
-							--set rabbit.url="$tgs_rabbit_url" \
-                            --set rabbit.user="$tgs_rabbit_user" \
-                            --set rabbit.password="$tgs_rabbit_pass" \
-                            --set rabbit.vhost="$tgs_rabbit_vhost"
-					'''
-					sh '''
-						helm template Deployment/k8s/sms-api \
-							--set image.tag=${TAG} \
-							--set namespace=${kube_ns} \
-							--set connectionStrings.tgs="$tgs_tgs" \
-							--set rabbit.url="$tgs_rabbit_url" \
-                            --set rabbit.user="$tgs_rabbit_user" \
-                            --set rabbit.password="$tgs_rabbit_pass" \
-                            --set rabbit.vhost="$tgs_rabbit_vhost" | kubectl -n ${kube_ns} apply -f -
-					'''
-				}
+                script {
+                    withKubeConfig([credentialsId: env.k8s_config]) {
+                        withCredentials([string(credentialsId: "tgs-${kube_ns}-connectionstring", variable: "tgs_tgs")]) {
+                            
+                            def resources = getResources(env.k8s_config, env.kube_ns, "sms-service")
+                            def dedicated = getTgsSettings(env.k8s_config, env.kube_ns, "dedicated")
+                            def node_selector = getTgsSettings(env.k8s_config, env.kube_ns, "node-selector")
+                            
+                            println resources
+                            println dedicated
+                            println node_selector
+
+                            sh """
+                                cat << EOF | yq e -P | helm template Deployment/k8s/sms-api \
+                                    --set image.tag=${TAG} \
+                                    --set namespace=${kube_ns} \
+                                    --set connectionStrings.tgs="$tgs_tgs" \
+                                    --set rabbit.url="$tgs_rabbit_url" \
+                                    --set rabbit.user="$tgs_rabbit_user" \
+                                    --set rabbit.password="$tgs_rabbit_pass" \
+                                    --set rabbit.vhost="$tgs_rabbit_vhost" \
+                                     -f -
+                                {
+                                    "nodeSelector": $node_selector,
+                                    "tolerations": [$dedicated],
+                                    "resources": $resources
+                                }
+                            """
+                            sh """
+                                cat << EOF | yq e -P | helm template Deployment/k8s/sms-api \
+                                    --set image.tag=${TAG} \
+                                    --set namespace=${kube_ns} \
+                                    --set connectionStrings.tgs="$tgs_tgs" \
+                                    --set rabbit.url="$tgs_rabbit_url" \
+                                    --set rabbit.user="$tgs_rabbit_user" \
+                                    --set rabbit.password="$tgs_rabbit_pass" \
+                                    --set rabbit.vhost="$tgs_rabbit_vhost" \
+                                    -f - \
+                                    | kubectl -n ${kube_ns} apply -f -
+                                {
+                                    "nodeSelector": $node_selector,
+                                    "tolerations": [$dedicated],
+                                    "resources": $resources
+                                }
+                            """
+                        }
+                    }
+                }
 			}
 		}
 		
@@ -158,18 +185,4 @@ pipeline {
             sendTelegram("<b>Failed Pipeline:</b> ${currentBuild.fullDisplayName} Something is wrong with ${env.BUILD_URL}/console\n${currentBuild.getBuildCauses()[0].shortDescription}\n")
         }
 	}
-}
-
-def sendTelegram(message) {
-    def encodedMessage = URLEncoder.encode(message, "UTF-8")
-
-    withCredentials([string(credentialsId: "telegramToken", variable: "TOKEN"), string(credentialsId: "telegramChatId", variable: "CHAT_ID")]) {
-
-        response = httpRequest (consoleLogResponseBody: true,
-                contentType: 'APPLICATION_JSON',
-                httpMode: 'GET',
-                url: "https://api.telegram.org/bot${TOKEN}/sendMessage?text=${encodedMessage}&chat_id=${CHAT_ID}",
-                validResponseCodes: '200')
-        return response
-    }
 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿namespace TGS.SmsService.Client;
 
-namespace TGS.SmsService.Client
+public interface ISmsServiceClient
 {
-    public interface ISmsServiceClient
-    {
-        ValueTask SendShortMessageAsync(string phone, string message, Guid brandId);
-    }
+    ValueTask SendShortMessageAsync(string phone, string message, Guid brandId);
 }

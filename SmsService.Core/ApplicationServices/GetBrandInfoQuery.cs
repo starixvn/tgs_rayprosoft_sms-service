@@ -1,6 +1,3 @@
-﻿using System;
+﻿namespace Tgs.SmsService.ApplicationServices;
 
-namespace Tgs.SmsService.ApplicationServices
-{
-    public record GetBrandInfoQuery(Guid BrandId);
-}
+public record GetBrandInfoQuery(Guid BrandId);
