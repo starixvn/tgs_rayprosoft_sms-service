@@ -47,7 +47,7 @@ push-nuget:
     - main
   script:
     - dotnet pack -c $BuildConfiguration "SmsReceiver/SmsReceiver.csproj" --no-build --no-restore
-    - dotnet nuget push "SmsReceiver/bin/$BuildConfiguration/*.nupkg" --source "raypro" --skip-duplicate
+    - dotnet nuget push "SmsReceiver/bin/$BuildConfiguration/*.nupkg" -s "raypro-baget" -k $NugetApiKey --skip-duplicate
     - dotnet pack -c $BuildConfiguration "SmsServiceClient/SmsServiceClient.csproj" --no-build --no-restore
     - dotnet nuget push "SmsServiceClient/bin/$BuildConfiguration/*.nupkg" -s "raypro-baget" -k $NugetApiKey --skip-duplicate
   artifacts:
