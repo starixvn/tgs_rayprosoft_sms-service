@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31019.35
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsService", "SmsService\SmsService.csproj", "{59BF74E8-7AD5-425F-99E7-15EC5FF4FBE1}"
 EndProject
@@ -29,11 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{0B5A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{26318B99-D1F3-4511-B095-6F7FB19DB55E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.WebApi.Toolkits", "Tgs.WebApi.Toolkits\Tgs.WebApi.Toolkits.csproj", "{BB9DB5E1-DFD6-440B-8E3A-CCC1F8D3A0B1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsService.Repositories", "SmsService.Repositories\SmsService.Repositories.csproj", "{E4E8C0B7-DEB5-4D94-BE8B-AE469D86BB2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsService.Core.UnitTests", "SmsService.Core.UnitTests\SmsService.Core.UnitTests.csproj", "{9626A6FE-2DD3-48F7-9281-6DB200BE82ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsService.Core.UnitTests", "SmsService.Core.UnitTests\SmsService.Core.UnitTests.csproj", "{9626A6FE-2DD3-48F7-9281-6DB200BE82ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +63,6 @@ Global
 		{24A78457-CA59-450B-B362-5C175E33F781}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24A78457-CA59-450B-B362-5C175E33F781}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24A78457-CA59-450B-B362-5C175E33F781}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB9DB5E1-DFD6-440B-8E3A-CCC1F8D3A0B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB9DB5E1-DFD6-440B-8E3A-CCC1F8D3A0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB9DB5E1-DFD6-440B-8E3A-CCC1F8D3A0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB9DB5E1-DFD6-440B-8E3A-CCC1F8D3A0B1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4E8C0B7-DEB5-4D94-BE8B-AE469D86BB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4E8C0B7-DEB5-4D94-BE8B-AE469D86BB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4E8C0B7-DEB5-4D94-BE8B-AE469D86BB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,7 +81,6 @@ Global
 		{9C384E6F-DEE4-4FBD-A4DC-154CC108E45D} = {F08D96FA-62D7-4005-A54A-D925FECA8397}
 		{80029651-721F-4742-8CF8-CF0BE850FA71} = {0B5A78AD-2181-4C9A-916A-ADD27DB0D06C}
 		{24A78457-CA59-450B-B362-5C175E33F781} = {26318B99-D1F3-4511-B095-6F7FB19DB55E}
-		{BB9DB5E1-DFD6-440B-8E3A-CCC1F8D3A0B1} = {F08D96FA-62D7-4005-A54A-D925FECA8397}
 		{E4E8C0B7-DEB5-4D94-BE8B-AE469D86BB2B} = {F08D96FA-62D7-4005-A54A-D925FECA8397}
 		{9626A6FE-2DD3-48F7-9281-6DB200BE82ED} = {26318B99-D1F3-4511-B095-6F7FB19DB55E}
 	EndGlobalSection

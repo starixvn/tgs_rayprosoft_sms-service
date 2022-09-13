@@ -33,4 +33,12 @@
     <ProjectReference Include="..\SmsService\SmsService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Users\Phoenix\source\repos\sms-service\SmsService.IntegrationTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Users\Phoenix\source\repos\sms-service\SmsService.IntegrationTests\.editorconfig" />
+  </ItemGroup>
+
 </Project>

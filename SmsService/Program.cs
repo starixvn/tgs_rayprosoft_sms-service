@@ -46,7 +46,7 @@ builder.Services.AddSwaggerGen(options =>
             Version = "v1"
         });
 
-    options.OperationFilter<SwaggerDocFilter>();
+    options.ApplyWebApiToolkitSupport();
 });
 
 builder.Services

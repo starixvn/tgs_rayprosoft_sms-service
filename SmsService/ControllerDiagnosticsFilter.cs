@@ -5,7 +5,7 @@ namespace TGS.SmsService;
 
 public class ControllerDiagnosticsFilter : IAsyncActionFilter
 {
-    private static readonly ActivitySource _ActivitySource = new ActivitySource("TGS.SmsService.Controllers");
+    private static readonly ActivitySource _ActivitySource = new("TGS.SmsService.Controllers");
 
     public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {

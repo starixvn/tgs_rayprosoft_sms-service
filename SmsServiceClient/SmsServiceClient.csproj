@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>TGS.SmsService.Client</RootNamespace>
     <PackageId>TGS.SmsServiceClient</PackageId>
-    <Version>0.0.6-alpha</Version>
+    <Version>0.0.7</Version>
     <Authors>Raypro</Authors>
     <Product>TGS.SmsServiceClient</Product>
     <PackageProjectUrl>https://gitlab.com/rayprosoft/sms-service</PackageProjectUrl>

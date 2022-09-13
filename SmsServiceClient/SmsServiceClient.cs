@@ -6,7 +6,7 @@ namespace TGS.SmsService.Client;
 
 internal class SmsServiceClient : ISmsServiceClient
 {
-    private static readonly JsonSerializerOptions _JsonSerializerOptions = new JsonSerializerOptions
+    private static readonly JsonSerializerOptions _JsonSerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
