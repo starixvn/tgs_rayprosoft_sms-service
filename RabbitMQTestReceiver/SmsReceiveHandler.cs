@@ -1,21 +1,17 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using Tgs.MessageQueue;
 using Tgs.Sms.Protos;
 
-namespace TGS.RabbitMQTestReceiver
+namespace TGS.RabbitMQTestReceiver;
+
+internal class SmsReceiveHandler : IMessageHandler
 {
-    internal class SmsReceiveHandler : IMessageHandler
+    public ValueTask HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
     {
-        public ValueTask HandleAsync(byte[] data, CancellationToken cancellationToken = default)
-        {
-            var smsMessage = ShortMessage.Parser.ParseFrom(data);
+        var smsMessage = ShortMessage.Parser.ParseFrom(data.Span);
 
-            Console.WriteLine(JsonFormatter.ToDiagnosticString(smsMessage));
+        Console.WriteLine(JsonFormatter.ToDiagnosticString(smsMessage));
 
-            return ValueTask.CompletedTask;
-        }
+        return ValueTask.CompletedTask;
     }
 }

@@ -1,15 +1,13 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace TGS.SmsService
+namespace TGS.SmsService;
+
+public class PerformanceCounterAttribute : ActionFilterAttribute
 {
-    public class PerformanceCounterAttribute : ActionFilterAttribute
-    {
-        internal Action CountAction { get; }
+    internal Action CountAction { get; }
 
-        public PerformanceCounterAttribute(Type meterType, string methodName)
-        {
-            CountAction = meterType.GetMethod(methodName)!.CreateDelegate<Action>();
-        }
+    public PerformanceCounterAttribute(Type meterType, string methodName)
+    {
+        CountAction = meterType.GetMethod(methodName)!.CreateDelegate<Action>();
     }
 }

@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>Tgs.SmsService</RootNamespace>
 		<Nullable>enable</Nullable>
 		<AssemblyName>Tgs.SmsService.Core</AssemblyName>
+		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,15 +15,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Protobuf" Version="3.18.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.40.0">
+		<PackageReference Include="Google.Protobuf" Version="3.21.5" />
+		<PackageReference Include="Grpc.Tools" Version="2.48.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-		<PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.2-alpha" />
-		<PackageReference Include="Tgs.MessageQueue" Version="1.1.1" />
-		<PackageReference Include="TGS.ServiceUtility" Version="0.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+		<PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.6" />
+		<PackageReference Include="Tgs.MessageQueue" Version="2.1.0" />
+		<PackageReference Include="TGS.ServiceUtility" Version="0.1.0" />
 	</ItemGroup>
 
 </Project>

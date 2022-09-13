@@ -1,31 +1,28 @@
-﻿using System;
-using System.Threading.Tasks;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using Tgs.MessageQueue;
 using Tgs.Sms.Protos;
 
-namespace Tgs.SmsService
+namespace Tgs.SmsService;
+
+internal class MessageQueueSender : ISmsSender
 {
-    internal class MessageQueueSender : ISmsSender
+    private readonly IMessageSender _messageSender;
+
+    public MessageQueueSender(IMessageSender messageSender)
     {
-        private readonly IMessageSender _messageSender;
+        _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
+    }
 
-        public MessageQueueSender(IMessageSender messageSender)
+    public ValueTask SendSmsAsync(Guid brandId, string vendorCode, string destination, string message)
+    {
+        var body = new ShortMessage()
         {
-            _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
-        }
+            BrandId = brandId,
+            Destination = destination,
+            Content = message
+        };
 
-        public ValueTask SendSmsAsync(Guid brandId, string vendorCode, string destination, string message)
-        {
-            var body = new ShortMessage()
-            {
-                BrandId = brandId,
-                Destination = destination,
-                Content = message
-            };
-
-            return _messageSender
-                .PublishAsync($"tgs.sms.{vendorCode}", body.ToByteArray());
-        }
+        return _messageSender
+            .PublishAsync($"tgs.sms.{vendorCode}", body.ToByteArray());
     }
 }

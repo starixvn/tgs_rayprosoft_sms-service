@@ -1,21 +1,19 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using OpenTelemetry;
 
-namespace TGS.SmsService.Metrics
+namespace TGS.SmsService.Metrics;
+
+public class PerformanceCounterExporter : BaseExporter<Activity>
 {
-    public class PerformanceCounterExporter : BaseExporter<Activity>
+    public override ExportResult Export(in Batch<Activity> batch)
     {
-        public override ExportResult Export(in Batch<Activity> batch)
+        foreach (var activity in batch)
         {
-            foreach (var activity in batch)
-            {
-                var counterAction = (Action?)activity.GetCustomProperty("PerformanceCounter");
+            var counterAction = (Action?)activity.GetCustomProperty("PerformanceCounter");
 
-                counterAction?.Invoke();
-            }
-
-            return ExportResult.Success;
+            counterAction?.Invoke();
         }
+
+        return ExportResult.Success;
     }
 }

@@ -1,44 +1,40 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace TGS.SmsService.Client
+namespace TGS.SmsService.Client;
+
+internal class SmsServiceClient : ISmsServiceClient
 {
-    internal class SmsServiceClient : ISmsServiceClient
+    private static readonly JsonSerializerOptions _JsonSerializerOptions = new JsonSerializerOptions
     {
-        private readonly static JsonSerializerOptions _JsonSerializerOptions = new JsonSerializerOptions
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
+    private readonly HttpClient _httpClient;
+
+    public SmsServiceClient(HttpClient httpClient)
+    {
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    }
+
+    public async ValueTask SendShortMessageAsync(string phone, string message, Guid brandId)
+    {
+        var postData = new
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            Destination = phone,
+            Message = message,
+            BrandId = brandId
         };
 
-        private readonly HttpClient _httpClient;
+        var body = new StringContent(
+            JsonSerializer.Serialize(postData, _JsonSerializerOptions),
+            Encoding.UTF8,
+            MediaTypeNames.Application.Json);
+        var response = await _httpClient
+            .PostAsync("/api/sms", body)
+            .ConfigureAwait(false);
 
-        public SmsServiceClient(HttpClient httpClient)
-        {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        }
-
-        public async ValueTask SendShortMessageAsync(string phone, string message, Guid brandId)
-        {
-            var postData = new
-            {
-                Destination = phone,
-                Message = message,
-                BrandId = brandId
-            };
-
-            var body = new StringContent(
-                JsonSerializer.Serialize(postData, _JsonSerializerOptions),
-                Encoding.UTF8,
-                MediaTypeNames.Application.Json);
-            var response = await _httpClient
-                .PostAsync("/api/sms", body)
-                .ConfigureAwait(false);
-
-            response.EnsureSuccessStatusCode();
-        }
+        response.EnsureSuccessStatusCode();
     }
 }

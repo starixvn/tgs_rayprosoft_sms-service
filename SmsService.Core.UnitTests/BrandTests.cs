@@ -1,28 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
-using NSubstitute;
+﻿using NSubstitute;
 using NUnit.Framework;
 using Tgs.SmsService;
 using Tgs.SmsService.ApplicationServices;
 
-namespace SmsService.Core.UnitTests
+namespace SmsService.Core.UnitTests;
+
+[TestFixture]
+public class BrandTests
 {
-    [TestFixture]
-    public class BrandTests
+    [Test]
+    public async Task Get_BrandInfo()
     {
-        [Test]
-        public async Task Get_BrandInfo()
-        {
-            var fakeTgsRepository = Substitute.For<ITgsRepository>();
+        var fakeTgsRepository = Substitute.For<ITgsRepository>();
 
-            var sut = new GetBrandInfoQueryService(fakeTgsRepository);
+        var sut = new GetBrandInfoQueryService(fakeTgsRepository);
 
-            var query = new GetBrandInfoQuery(Guid.NewGuid());
+        var query = new GetBrandInfoQuery(Guid.NewGuid());
 
-            await sut.GetAsync(query);
+        await sut.GetAsync(query);
 
-            _ = fakeTgsRepository.Received(1)
-                .GetBrandInfoByIdAsync(Arg.Is(query.BrandId));
-        }
+        _ = fakeTgsRepository.Received(1)
+            .GetBrandInfoByIdAsync(Arg.Is(query.BrandId));
     }
 }
