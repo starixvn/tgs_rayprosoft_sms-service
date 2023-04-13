@@ -22,7 +22,7 @@
 			"applicationUrl": "http://localhost:59131",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development",
-				"OTEL_SERVICE_NAME": "SmsService(local)",
+				"OTEL_SERVICE_NAME": "Sms-Api(local)",
 				"NODE_IP": "otel.rpgp.cc"
 			}
 		},
