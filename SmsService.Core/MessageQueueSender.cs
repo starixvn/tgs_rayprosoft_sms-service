@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf;
-using Tgs.MessageQueue;
 using Tgs.Sms.Protos;
+using Valhalla.MessageQueue;
 
 namespace Tgs.SmsService;
 

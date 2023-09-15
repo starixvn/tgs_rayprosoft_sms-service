@@ -31,12 +31,52 @@ builder.Logging
 
 SmsApiMeter.Init();
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.0.0.0"), 8));
-    options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
-    options.ForwardedHeaders = ForwardedHeaders.All;
-});
+builder.Services
+    .Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.0.0.0"), 8));
+        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+        options.ForwardedHeaders = ForwardedHeaders.All;
+    });
+
+builder.Services
+    .AddControllers()
+    .AddMvcOptions(options =>
+    {
+        options.Filters.Add<ControllerDiagnosticsFilter>();
+    });
+
+builder.Services
+    .AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc(
+            "v1",
+            new OpenApiInfo
+            {
+                Title = "SmsService API",
+                Version = "v1"
+            });
+
+        options.ApplyWebApiToolkitSupport();
+    });
+
+builder.Services
+    .AddSmsServiceCore()
+    .AddSmsServiceRepositories((sp, dbContextBuilder) =>
+    {
+        var config = sp.GetRequiredService<IConfiguration>();
+
+        dbContextBuilder.UseNpgsql(config.GetConnectionString("Tgs")!);
+    })
+    .AddPhoenixToolkitsMessageQueue()
+    .AddRabbitMessageQueue(config => config
+        .ConfigQueueOptions((options, sp) =>
+        {
+            var configuration = sp.GetRequiredService<IConfiguration>();
+
+            configuration.GetSection("Sms").Bind(options);
+        }))
+    .AddRabbitGlobPatternExchange("*", "amq.direct");
 
 builder.Services
     .AddOpenTelemetry()
@@ -66,44 +106,8 @@ builder.Services
             && !new[] { "html", "ico", "png", "jpg" }.Any(
                 ext => httpContext.Request.Path.Value.EndsWith($".{ext}")));
 
-builder.Services.AddControllers()
-    .AddMvcOptions(options =>
-    {
-        options.Filters.Add<ControllerDiagnosticsFilter>();
-    });
-
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc(
-        "v1",
-        new OpenApiInfo
-        {
-            Title = "SmsService API",
-            Version = "v1"
-        });
-
-    options.ApplyWebApiToolkitSupport();
-});
-
 builder.Services
-    .AddSmsServiceCore()
-    .AddSmsServiceRepositories((sp, dbContextBuilder) =>
-    {
-        var config = sp.GetRequiredService<IConfiguration>();
-
-        dbContextBuilder.UseNpgsql(config.GetConnectionString("Tgs")!);
-    })
-    .AddMessageQueue()
-    .AddRabbitMessageQueue(config => config
-        .ConfigQueueOptions((options, sp) =>
-        {
-            var configuration = sp.GetRequiredService<IConfiguration>();
-
-            configuration.GetSection("Sms").Bind(options);
-        }))
-    .AddRabbitGlobPatternExchange("*", "amq.direct");
-
-builder.Services.AddHealthChecks();
+    .AddHealthChecks();
 
 var app = builder.Build();
 
