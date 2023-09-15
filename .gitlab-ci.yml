@@ -45,6 +45,7 @@ deploy-dev:
   extends: .deploy-template
   variables:
     namespace: dev
+    kube_config: KubeConfig_Raypro_dev
   environment:
     name: dev
   stage: deploy-dev
@@ -61,6 +62,7 @@ deploy-staging:
   extends: .deploy-template
   variables:
     namespace: staging
+    kube_config: KubeConfig_Raypro_staging
   environment:
     name: staging
   stage: deploy-staging
@@ -76,6 +78,7 @@ deploy-prod:
   extends: .deploy-template
   variables:
     namespace: prod
+    kube_config: KubeConfig_Raypro_prod
   environment:
     name: prod
   stage: deploy-prod
