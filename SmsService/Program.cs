@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Tgs.WebApi.Toolkits;
 using TGS.SmsService;
 using TGS.SmsService.Metrics;
 
@@ -24,13 +22,12 @@ builder.Logging
         options.ParseStateValues = true;
         _ = options.AddFluentdForwardExporter(fluentOptions =>
         {
-            var nodeIp = builder.Configuration.GetValue<string>("NODE_IP");            
+            var nodeIp = builder.Configuration.GetValue<string>("NODE_IP");
             fluentOptions.Host = nodeIp!;
             fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
             fluentOptions.UseMessagePack();
         });
     });
-
 
 SmsApiMeter.Init();
 
@@ -73,7 +70,6 @@ builder.Services.AddControllers()
     .AddMvcOptions(options =>
     {
         options.Filters.Add<ControllerDiagnosticsFilter>();
-        options.Filters.Add<RetouchResponseFilter>();
     });
 
 builder.Services.AddSwaggerGen(options =>
