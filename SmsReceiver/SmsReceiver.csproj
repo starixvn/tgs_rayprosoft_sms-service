@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net6.0</TargetFrameworks>
 		<RootNamespace>Tgs.Sms.Receivers</RootNamespace>
 		<Nullable>enable</Nullable>
 		<PackageId>TGS.SmsReceiver</PackageId>
 		<Authors>Raypro</Authors>
 		<Product>TGS.SmsReceiver</Product>
-		<Version>0.0.5</Version>
+		<Version>0.0.6</Version>
 		<PackageProjectUrl>https://gitlab.com/rayprosoft/sms-service</PackageProjectUrl>
 		<RepositoryUrl>https://gitlab.com/rayprosoft/sms-service.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -18,16 +18,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Protobuf" Version="3.18.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.40.0">
+		<PackageReference Include="AsyncMethodNameFixer" Version="2.3.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.24.3" />
+		<PackageReference Include="Grpc.Tools" Version="2.58.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-		<PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.2-alpha" />
-		<PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+		<PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.6" />
+		<PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
