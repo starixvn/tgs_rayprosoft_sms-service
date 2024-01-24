@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -9,10 +10,7 @@ using TGS.SmsService;
 using TGS.SmsService.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Configuration
-    .AddJsonFile("/config/appsettings.json", true)
-    .AddEnvironmentVariables();
+SmsApiMeter.Init();
 
 builder.Logging
     .AddOpenTelemetry(options =>
@@ -24,11 +22,11 @@ builder.Logging
             var nodeIp = builder.Configuration.GetValue<string>("NODE_IP");
             fluentOptions.Host = nodeIp!;
             fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
-            fluentOptions.UseMessagePack();
+            fluentOptions.UseMessagePack(LogRecordFormatterResolver.GetResolverInstanceWithExtendInfo(
+                "MachineName",
+                () => Environment.MachineName));
         });
     });
-
-SmsApiMeter.Init();
 
 builder.Services
     .Configure<ForwardedHeadersOptions>(options =>
@@ -105,9 +103,8 @@ builder.Services
             .AddEnvironmentVariableDetector())
         .AddRuntimeInstrumentation()
         .AddAspNetCoreInstrumentation()
-        .AddOtlpExporter());
-
-builder.Services
+        .AddOtlpExporter())
+    .Services
     .AddHealthChecks();
 
 var app = builder.Build();

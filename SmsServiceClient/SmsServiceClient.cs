@@ -18,13 +18,19 @@ internal class SmsServiceClient : ISmsServiceClient
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
-    public async ValueTask SendShortMessageAsync(string phone, string message, Guid brandId)
+    public async ValueTask SendShortMessageAsync(
+        string phone,
+        string message,
+        Guid brandId,
+        string? areaCode = null,
+        CancellationToken cancellationToken = default)
     {
         var postData = new
         {
             Destination = phone,
             Message = message,
-            BrandId = brandId
+            BrandId = brandId,
+            AreaCode = areaCode
         };
 
         var body = new StringContent(
@@ -32,7 +38,7 @@ internal class SmsServiceClient : ISmsServiceClient
             Encoding.UTF8,
             MediaTypeNames.Application.Json);
         var response = await _httpClient
-            .PostAsync("/api/sms", body)
+            .PostAsync("/api/sms", body, cancellationToken)
             .ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
