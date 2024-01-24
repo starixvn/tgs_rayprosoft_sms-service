@@ -66,22 +66,22 @@ spec:
                   key: rabbitmq-vhost
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: /config/appsettings.json
+            - mountPath: /app/appsettings.Production.json
               name: appsettings
               readOnly: true
               subPath: appsettings.json
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 80
+              port: http
             periodSeconds: 5
           startupProbe:
             httpGet:
               path: /healthz
-              port: 80
+              port: http
             periodSeconds: 2
             failureThreshold: 30
           resources:
