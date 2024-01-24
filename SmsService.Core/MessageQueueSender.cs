@@ -4,14 +4,9 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.SmsService;
 
-internal class MessageQueueSender : ISmsSender
+internal class MessageQueueSender(IMessageSender messageSender) : ISmsSender
 {
-    private readonly IMessageSender _messageSender;
-
-    public MessageQueueSender(IMessageSender messageSender)
-    {
-        _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
-    }
+    private readonly IMessageSender _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
 
     public ValueTask SendSmsAsync(Guid brandId, string vendorCode, string destination, string message)
     {

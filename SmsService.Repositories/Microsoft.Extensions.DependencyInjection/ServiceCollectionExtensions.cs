@@ -10,7 +10,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSmsServiceRepositories(
         this IServiceCollection services,
         Action<IServiceProvider, DbContextOptionsBuilder> dbContextConfigure)
-        => services
-            .AddDbContext<TgsContext>(dbContextConfigure)
-            .AddTransient<ITgsRepository, TgsRepository>();
+    {
+        return services
+                .AddDbContext<TgsContext>(dbContextConfigure)
+                .AddTransient<ITgsRepository, TgsRepository>();
+    }
 }

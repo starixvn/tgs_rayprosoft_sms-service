@@ -10,14 +10,9 @@ namespace TGS.SmsService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SmsController : ControllerBase
+public class SmsController(ILogger<SmsController> logger) : ControllerBase
 {
-    private readonly ILogger<SmsController> _logger;
-
-    public SmsController(ILogger<SmsController> logger)
-    {
-        _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
-    }
+    private readonly ILogger<SmsController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     /// <summary>Enqueue the short message to send.</summary>
     /// <param name="sendSmsCommand">The send SMS command.</param>

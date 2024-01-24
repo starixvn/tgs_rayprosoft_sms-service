@@ -4,14 +4,9 @@ using Tgs.SmsService;
 
 namespace SmsService.Repositories;
 
-internal class TgsRepository : ITgsRepository
+internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
 {
-    private readonly TgsContext _tgsContext;
-
-    public TgsRepository(TgsContext tgsContext)
-    {
-        _tgsContext = tgsContext ?? throw new ArgumentNullException(nameof(tgsContext));
-    }
+    private readonly TgsContext _tgsContext = tgsContext ?? throw new ArgumentNullException(nameof(tgsContext));
 
     public async ValueTask<BrandInfo?> GetBrandInfoByIdAsync(Guid brandId)
     {
@@ -20,7 +15,9 @@ internal class TgsRepository : ITgsRepository
             .ConfigureAwait(false);
 
         if (brand == null)
+        {
             return null;
+        }
 
         return new BrandInfo(
             brand.Id,

@@ -6,8 +6,9 @@ namespace TGS.RabbitMQTestReceiver;
 
 internal class Program
 {
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
             .ConfigureServices(services =>
             {
                 services
@@ -38,6 +39,7 @@ internal class Program
                         .AddHandler<SmsReceiveHandler>("sms.test", false))
                     .AddRabbitGlobPatternExchange("*", "amq.direct");
             });
+    }
 
     private static void Main(string[] args)
     {
