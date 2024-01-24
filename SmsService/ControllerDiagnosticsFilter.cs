@@ -20,7 +20,9 @@ public class ControllerDiagnosticsFilter : IAsyncActionFilter
             Action counterAction = () =>
             {
                 for (var i = 0; i < counters.Length; i++)
+                {
                     counters[i].CountAction.Invoke();
+                }
             };
             activity?.SetCustomProperty("PerformanceCounter", counterAction);
         }

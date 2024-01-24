@@ -1,9 +1,12 @@
 ﻿namespace TGS.SmsService.ViewModels;
 
-/// <summary>
-/// The sms content view model.
-/// </summary>
-public record SmsViewModel(
-    string Destination,
-    string Message,
-    Guid BrandId);
+public class SmsViewModel
+{
+    public required string Destination { get; set; }
+
+    public required string Message { get; set; }
+
+    public required Guid BrandId { get; set; }
+
+    public string? AreaCode { get; set; }
+}

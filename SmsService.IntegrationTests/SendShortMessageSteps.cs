@@ -1,9 +1,7 @@
 ﻿using System.Text.Json;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using TechTalk.SpecFlow;
 using Tgs.SmsService;
@@ -12,15 +10,10 @@ using TGS.SmsService.Client;
 namespace TGS.SmsService.IntegrationTests;
 
 [Binding]
-public class SendShortMessageSteps
+public class SendShortMessageSteps(ScenarioContext context)
 {
-    private readonly ScenarioContext _context;
-    private ISmsServiceClient _smsServiceClient;
-
-    public SendShortMessageSteps(ScenarioContext context)
-    {
-        _context = context;
-    }
+    private readonly ScenarioContext _context = context;
+    private SmsServiceClient _smsServiceClient;
 
     [BeforeScenario]
     public void Setup()

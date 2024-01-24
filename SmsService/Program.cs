@@ -1,8 +1,8 @@
 ﻿using System.Net;
+using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -10,10 +10,7 @@ using TGS.SmsService;
 using TGS.SmsService.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Configuration
-    .AddJsonFile("/config/appsettings.json", true)
-    .AddEnvironmentVariables();
+SmsApiMeter.Init();
 
 builder.Logging
     .AddOpenTelemetry(options =>
@@ -25,17 +22,19 @@ builder.Logging
             var nodeIp = builder.Configuration.GetValue<string>("NODE_IP");
             fluentOptions.Host = nodeIp!;
             fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
-            fluentOptions.UseMessagePack();
+            fluentOptions.UseMessagePack(LogRecordFormatterResolver.GetResolverInstanceWithExtendInfo(
+                "MachineName",
+                () => Environment.MachineName));
         });
     });
-
-SmsApiMeter.Init();
 
 builder.Services
     .Configure<ForwardedHeadersOptions>(options =>
     {
-        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.0.0.0"), 8));
-        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+        options.KnownNetworks.Add(
+            new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("172.0.0.0"), 8));
+        options.KnownNetworks.Add(
+            new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
         options.ForwardedHeaders = ForwardedHeaders.All;
     });
 
@@ -78,6 +77,7 @@ builder.Services
         }))
     .AddRabbitGlobPatternExchange("*", "amq.direct");
 
+var excludeExtensions = new[] { "html", "ico", "png", "jpg" };
 builder.Services
     .AddOpenTelemetry()
     .WithTracing(builder => builder
@@ -85,7 +85,16 @@ builder.Services
             .AddEnvironmentVariableDetector())
         .AddSource("Tgs.*")
         .AddSource("TGS.*")
-        .AddAspNetCoreInstrumentation()
+        .AddSource("Valhalla.*")
+        .AddAspNetCoreInstrumentation(options => options.Filter =
+        httpContext => !httpContext.Request.Path.HasValue
+            || !httpContext.Request.Path.StartsWithSegments("/swagger")
+            && !httpContext.Request.Path.StartsWithSegments("/healthz")
+            && !httpContext.Request.Path.StartsWithSegments("/profiler/")
+            && !httpContext.Request.Path.StartsWithSegments("/hangfire")
+            && !httpContext.Request.Path.StartsWithSegments("/metrics")
+            && !excludeExtensions.Any(
+                ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
         .AddHttpClientInstrumentation()
         .AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true)
         .AddOtlpExporter())
@@ -96,17 +105,6 @@ builder.Services
         .AddAspNetCoreInstrumentation()
         .AddOtlpExporter())
     .Services
-    .Configure<AspNetCoreInstrumentationOptions>(options => options.Filter =
-        httpContext => !httpContext.Request.Path.HasValue
-            || !httpContext.Request.Path.StartsWithSegments("/swagger")
-            && !httpContext.Request.Path.StartsWithSegments("/healthz")
-            && !httpContext.Request.Path.StartsWithSegments("/profiler/")
-            && !httpContext.Request.Path.StartsWithSegments("/hangfire")
-            && !httpContext.Request.Path.StartsWithSegments("/metrics")
-            && !new[] { "html", "ico", "png", "jpg" }.Any(
-                ext => httpContext.Request.Path.Value.EndsWith($".{ext}")));
-
-builder.Services
     .AddHealthChecks();
 
 var app = builder.Build();

@@ -3,16 +3,10 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.SmsService.ApplicationServices;
 
-internal class SendSmsCommandService : ICommandService<SendSmsCommand>
+internal class SendSmsCommandService(ISmsSender smsSender, ILogger<SendSmsCommandService> logger) : ICommandService<SendSmsCommand>
 {
-    private readonly ISmsSender _smsSender;
-    private readonly ILogger<SendSmsCommandService> _logger;
-
-    public SendSmsCommandService(ISmsSender smsSender, ILogger<SendSmsCommandService> logger)
-    {
-        _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+    private readonly ISmsSender _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
+    private readonly ILogger<SendSmsCommandService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     public async ValueTask ExecuteAsync(SendSmsCommand command, CancellationToken cancellationToken = default)
     {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>Tgs.SmsService</RootNamespace>
 		<Nullable>enable</Nullable>
 		<AssemblyName>Tgs.SmsService.Core</AssemblyName>
@@ -16,13 +16,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="AsyncMethodNameFixer" Version="2.3.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.24.3" />
-		<PackageReference Include="Grpc.Tools" Version="2.58.0">
+		<PackageReference Include="Google.Protobuf" Version="3.25.2" />
+		<PackageReference Include="Grpc.Tools" Version="2.60.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.1.0" />
 		<PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.6" />
 		<PackageReference Include="TGS.ServiceUtility" Version="0.2.0" />
 	</ItemGroup>
