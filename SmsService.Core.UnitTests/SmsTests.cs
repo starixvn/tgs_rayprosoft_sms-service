@@ -21,9 +21,12 @@ public class SmsTests
             logger);
 
         var command = new SendSmsCommand(
-            Guid.NewGuid(),
-            "886988123456",
-            "test",
+            new ShortMessageData(
+                Guid.NewGuid(),
+                "886988123456",
+                "test",
+                "012",
+                "11111"),
             "Test",
             JsonDocument.Parse("{}"));
 
@@ -31,9 +34,7 @@ public class SmsTests
 
         _ = fakeSmsSender.Received(1)
             .SendSmsAsync(
-                Arg.Is(command.BrandId),
                 Arg.Is(command.VendorCode.ToLower()),
-                Arg.Is(command.Destination),
-                Arg.Is(command.Message));
+                Arg.Is(command.ShortMessage));
     }
 }

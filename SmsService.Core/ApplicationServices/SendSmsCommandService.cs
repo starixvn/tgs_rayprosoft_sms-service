@@ -11,10 +11,9 @@ internal class SendSmsCommandService(ISmsSender smsSender, ILogger<SendSmsComman
     public async ValueTask ExecuteAsync(SendSmsCommand command, CancellationToken cancellationToken = default)
     {
         await _smsSender.SendSmsAsync(
-            command.BrandId,
             command.VendorCode.ToLower(),
-            command.Destination,
-            command.Message).ConfigureAwait(false);
+            command.ShortMessage,
+            cancellationToken).ConfigureAwait(false);
 
         _logger.Log(
             LogLevel.Information,
@@ -22,12 +21,14 @@ internal class SendSmsCommandService(ISmsSender smsSender, ILogger<SendSmsComman
             new
             {
                 command.VendorCode,
-                command.Destination,
-                command.Message
+                command.ShortMessage.Destination,
+                command.ShortMessage.Message,
+                command.ShortMessage.AreaCode,
+                command.ShortMessage.Phone
             },
             null,
-            (state, ex) => $"[{nameof(command.VendorCode)}]{command.VendorCode}, " +
-                $"[{nameof(command.Destination)}]{command.Destination}, " +
-                $"[{nameof(command.Message)}]{command.Message}");
+            (state, ex) => $"[{nameof(state.VendorCode)}]{state.VendorCode}, "
+                + $"[{nameof(state.Destination)}]{state.Destination}, "
+                + $"[{nameof(state.Message)}]{state.Message}");
     }
 }

@@ -3,8 +3,6 @@
 namespace Tgs.SmsService.ApplicationServices;
 
 public record SendSmsCommand(
-    Guid BrandId,
-    string Destination,
-    string Message,
+    ShortMessageData ShortMessage,
     string VendorCode,
     JsonDocument VendorSettings);

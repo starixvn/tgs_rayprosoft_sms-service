@@ -2,5 +2,5 @@
 
 public interface ISmsSender
 {
-    ValueTask SendSmsAsync(Guid brandId, string vendorCode, string destination, string message);
+    ValueTask SendSmsAsync(string vendorCode, ShortMessageData message, CancellationToken cancellationToken = default);
 }
