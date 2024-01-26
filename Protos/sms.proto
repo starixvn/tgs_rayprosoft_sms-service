@@ -10,4 +10,5 @@ message ShortMessage {
     string content = 2;
     phoenix.protobuf.GuidValue brand_id = 3;
     optional string area_code = 4;
+    optional string phone = 5;
 }

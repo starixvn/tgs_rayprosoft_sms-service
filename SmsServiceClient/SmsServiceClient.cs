@@ -19,18 +19,20 @@ internal class SmsServiceClient : ISmsServiceClient
     }
 
     public async ValueTask SendShortMessageAsync(
-        string phone,
+        string destination,
         string message,
         Guid brandId,
         string? areaCode = null,
+        string? phone = null,
         CancellationToken cancellationToken = default)
     {
         var postData = new
         {
-            Destination = phone,
+            Destination = destination,
             Message = message,
             BrandId = brandId,
-            AreaCode = areaCode
+            AreaCode = areaCode,
+            Phone = phone
         };
 
         var body = new StringContent(

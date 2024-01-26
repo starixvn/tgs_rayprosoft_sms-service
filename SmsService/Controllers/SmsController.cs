@@ -10,10 +10,8 @@ namespace TGS.SmsService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SmsController(ILogger<SmsController> logger) : ControllerBase
+public class SmsController : ControllerBase
 {
-    private readonly ILogger<SmsController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
     /// <summary>Enqueue the short message to send.</summary>
     /// <param name="sendSmsCommand">The send SMS command.</param>
     /// <param name="shortMessage">The short message.</param>
@@ -41,12 +39,17 @@ public class SmsController(ILogger<SmsController> logger) : ControllerBase
             return;
         }
 
-        await sendSmsCommand.ExecuteAsync(
-            new SendSmsCommand(
+        var command = new SendSmsCommand(
+            new ShortMessageData(
                 shortMessage.BrandId,
                 shortMessage.Destination,
                 shortMessage.Message,
-                brandInfo.SmsVendorCode!,
-                brandInfo.SmsVendorSettings!)).ConfigureAwait(false);
+                shortMessage.AreaCode,
+                shortMessage.Phone),
+            brandInfo.SmsVendorCode!,
+            brandInfo.SmsVendorSettings!);
+        await sendSmsCommand.ExecuteAsync(
+            command,
+            HttpContext.RequestAborted).ConfigureAwait(false);
     }
 }

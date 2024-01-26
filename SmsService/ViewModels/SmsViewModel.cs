@@ -9,4 +9,6 @@ public class SmsViewModel
     public required Guid BrandId { get; set; }
 
     public string? AreaCode { get; set; }
+
+    public string? Phone { get; set; }
 }

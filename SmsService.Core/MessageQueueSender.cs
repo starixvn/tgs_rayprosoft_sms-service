@@ -6,18 +6,20 @@ namespace Tgs.SmsService;
 
 internal class MessageQueueSender(IMessageSender messageSender) : ISmsSender
 {
-    private readonly IMessageSender _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
-
-    public ValueTask SendSmsAsync(Guid brandId, string vendorCode, string destination, string message)
+    public ValueTask SendSmsAsync(string vendorCode, ShortMessageData message, CancellationToken cancellationToken = default)
     {
         var body = new ShortMessage()
         {
-            BrandId = brandId,
-            Destination = destination,
-            Content = message
+            BrandId = message.BrandId,
+            Destination = message.Destination,
+            Content = message.Message,
+            AreaCode = message.AreaCode ?? string.Empty,
+            Phone = message.Phone ?? string.Empty
         };
 
-        return _messageSender
-            .PublishAsync($"tgs.sms.{vendorCode}", body.ToByteArray());
+        return messageSender.PublishAsync(
+            $"tgs.sms.{vendorCode}",
+            body.ToByteArray(),
+            cancellationToken: cancellationToken);
     }
 }
