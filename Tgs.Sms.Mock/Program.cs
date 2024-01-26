@@ -45,13 +45,16 @@ var builder = WebApplication.CreateBuilder(args);
                 Retention = StreamConfigRetention.Workqueue,
                 NumReplicas = builder.Configuration.GetValue<int>("Mock:JetStreamReplicas")
             })
-            .AddJetStreamHandler<SmsMessageReceiveHandler>(
+            .AddJetStreamHandler(
                 "tgs.sms.mock",
                 "tgs_sms_mock",
                 new ConsumerConfig("mock_mail_slot") with
                 {
                     MaxAckPending = 1
-                }));
+                },
+                handlerFactory: sp => ActivatorUtilities.CreateInstance<SmsMessageReceiveHandler>(
+                    sp,
+                    builder.Configuration.GetValue<long>("Mock:ChatId"))));
 
     var excludeExtensions = new[] { "html", "ico", "png", "jpg" };
     builder.Services
