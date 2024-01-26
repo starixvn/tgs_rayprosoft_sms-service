@@ -77,7 +77,8 @@ var builder = WebApplication.CreateBuilder(args);
                 .AddAspNetCoreInstrumentation()
                 .AddOtlpExporter())
         .Services
-        .AddProfileViewer();
+        .AddProfileViewer()
+        .AddHealthChecks();
 }
 
 var app = builder.Build();
