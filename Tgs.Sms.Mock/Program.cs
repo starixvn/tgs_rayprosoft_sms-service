@@ -4,6 +4,7 @@ using NATS.Client.JetStream.Models;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Telegram.Bot;
 using Tgs.MessageQueue.Nats.Serializers;
 using Tgs.Sms.Mock.MessageQueue;
 
@@ -36,6 +37,10 @@ var builder = WebApplication.CreateBuilder(args);
                 Url = builder.Configuration.GetConnectionString("Nats")!,
                 SerializerRegistry = TgsNatsSerializerRegistration.Default
             }))
+        .AddHttpClient<ITelegramBotClient, TelegramBotClient>((httpClient) => new TelegramBotClient(
+            builder.Configuration.GetValue<string>("Mock:Token")!,
+            httpClient))
+        .Services
         .AddMessageQueue()
         .AddNatsMessageQueue(config => config
             .ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
