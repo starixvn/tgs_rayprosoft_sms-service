@@ -27,6 +27,7 @@ internal class SmsServiceTestHost
             })
             .ConfigureServices(services => services
                 .AddFakeRabbitMessageQueue()
+                .AddFakeNatsMessageQueue()
                 .AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
                     sp => new ConfigureNamedOptions<OtlpExporterOptions>(
                         Options.DefaultName,
