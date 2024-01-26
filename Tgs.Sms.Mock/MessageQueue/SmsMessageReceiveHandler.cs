@@ -18,8 +18,7 @@ public class SmsMessageReceiveHandler(
         _ = await telegramBotClient.SendTextMessageAsync(
             chatId,
             $"""
-
-                        【短信】
+                【短信】
                 Date: {DateTime.UtcNow}
                 Destination: {shortMessage.Destination}
                 BrandId: {brandId}
