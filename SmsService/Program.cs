@@ -3,6 +3,8 @@ using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NATS.Client.Core;
+using NATS.Client.JetStream.Models;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -60,6 +62,12 @@ builder.Services
     });
 
 builder.Services
+    .AddKeyedSingleton(
+        "Nats",
+        (sp, _) => new NatsConnection(NatsOpts.Default with
+        {
+            Url = builder.Configuration.GetConnectionString("Nats")!
+        }))
     .AddSmsServiceCore()
     .AddSmsServiceRepositories((sp, dbContextBuilder) =>
     {
@@ -67,7 +75,7 @@ builder.Services
 
         dbContextBuilder.UseNpgsql(config.GetConnectionString("Tgs")!);
     })
-    .AddPhoenixToolkitsMessageQueue()
+    .AddMessageQueue()
     .AddRabbitMessageQueue(config => config
         .ConfigQueueOptions((options, sp) =>
         {
@@ -75,6 +83,15 @@ builder.Services
 
             configuration.GetSection("Sms").Bind(options);
         }))
+    .AddNatsMessageQueue(config => config
+        .ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
+        .ConfigJetStream(new StreamConfig("tgs_sms_mock", ["tgs.sms.mock"]) with
+        {
+            Storage = StreamConfigStorage.File,
+            Retention = StreamConfigRetention.Workqueue,
+            NumReplicas = 3
+        }))
+    .AddNatsJetStreamGlobPatternExchange("tgs.sms.mock")
     .AddRabbitGlobPatternExchange("*", "amq.direct");
 
 var excludeExtensions = new[] { "html", "ico", "png", "jpg" };

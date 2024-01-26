@@ -22,9 +22,9 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.9" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.7.0" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.7.0" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.1.1" />
 		<PackageReference Include="PhoenixToolkits.MessageQueue.RabbitMQ" Version="2.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageReference Include="Tgs.MessageQueue.Compatible" Version="0.0.2" />
 		<PackageReference Include="Tgs.WebApi.Toolkits" Version="0.4.0" />
 		<PackageReference Include="Tgs.WebApi.Toolkits.Swashbuckle" Version="0.4.0" />
 	</ItemGroup>
