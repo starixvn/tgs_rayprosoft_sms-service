@@ -31,7 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsService.Repositories", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsService.Core.UnitTests", "SmsService.Core.UnitTests\SmsService.Core.UnitTests.csproj", "{9626A6FE-2DD3-48F7-9281-6DB200BE82ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsService.IntegrationTests", "SmsService.IntegrationTests\SmsService.IntegrationTests.csproj", "{E3BB7300-E258-43BD-AFEC-C55CB777238F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmsService.IntegrationTests", "SmsService.IntegrationTests\SmsService.IntegrationTests.csproj", "{E3BB7300-E258-43BD-AFEC-C55CB777238F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.Sms.Mock", "Tgs.Sms.Mock\Tgs.Sms.Mock.csproj", "{8BE075CF-AFA1-4D3D-9065-64225433E896}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{E3BB7300-E258-43BD-AFEC-C55CB777238F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3BB7300-E258-43BD-AFEC-C55CB777238F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3BB7300-E258-43BD-AFEC-C55CB777238F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BE075CF-AFA1-4D3D-9065-64225433E896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BE075CF-AFA1-4D3D-9065-64225433E896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BE075CF-AFA1-4D3D-9065-64225433E896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BE075CF-AFA1-4D3D-9065-64225433E896}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
