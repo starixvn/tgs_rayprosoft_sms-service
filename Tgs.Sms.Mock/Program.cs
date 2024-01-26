@@ -4,6 +4,7 @@ using NATS.Client.JetStream.Models;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.MessageQueue.Nats.Serializers;
 using Tgs.Sms.Mock.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +33,8 @@ var builder = WebApplication.CreateBuilder(args);
             "Nats",
             (sp, _) => new NatsConnection(NatsOpts.Default with
             {
-                Url = builder.Configuration.GetConnectionString("Nats")!
+                Url = builder.Configuration.GetConnectionString("Nats")!,
+                SerializerRegistry = TgsNatsSerializerRegistration.Default
             }))
         .AddMessageQueue()
         .AddNatsMessageQueue(config => config

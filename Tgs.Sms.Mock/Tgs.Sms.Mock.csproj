@@ -20,6 +20,7 @@
     <PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.6" />
     <PackageReference Include="ProfileViewer.OpenTelemetry.Exporter" Version="0.3.1" />
     <PackageReference Include="Telegram.Bot" Version="19.0.0" />
+    <PackageReference Include="Tgs.MessageQueue.Nats.Serializers" Version="0.0.2" />
   </ItemGroup>
 
   <ItemGroup>
