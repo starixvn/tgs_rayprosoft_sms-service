@@ -4,7 +4,7 @@
     <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <RootNamespace>TGS.SmsService.Client</RootNamespace>
     <PackageId>TGS.SmsServiceClient</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>Raypro</Authors>
     <Product>TGS.SmsServiceClient</Product>
     <PackageProjectUrl>https://gitlab.com/rayprosoft/sms-service</PackageProjectUrl>
@@ -20,5 +20,6 @@
 		<PackageReference Include="AsyncMethodNameFixer" Version="2.3.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="System.Interactive.Async" Version="6.0.1" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,150 @@
+﻿using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Tgs.SmsService;
+using TGS.SmsService.Client;
+
+namespace SmsService.IntegrationTests;
+
+public class BrandSmsTests
+{
+    [Fact]
+    public async Task 新增平台簡訊設定()
+    {
+        // Arrange
+        var fakeTgsRepository = Substitute.For<ITgsRepository>();
+
+        var smsServiceHost = SmsServiceTestHost.Factory
+            .WithWebHostBuilder(webBuilder => webBuilder
+                .ConfigureServices(services => services
+                    .AddSingleton(fakeTgsRepository)));
+
+        var httpClient = smsServiceHost.CreateClient();
+        var sut = new SmsServiceClient(smsServiceHost.CreateClient());
+
+        var brandId = Guid.NewGuid();
+        var smsSettingId = Guid.NewGuid();
+
+        // Act
+        await sut.AddBrandSmsAsync(brandId, smsSettingId);
+
+        // Assert
+        _ = fakeTgsRepository.Received(1)
+            .AddBrandSmsAsync(
+                Arg.Is(brandId),
+                Arg.Is(smsSettingId),
+                Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task 移除平台簡訊設定()
+    {
+        // Arrange
+        var fakeTgsRepository = Substitute.For<ITgsRepository>();
+
+        var smsServiceHost = SmsServiceTestHost.Factory
+            .WithWebHostBuilder(webBuilder => webBuilder
+                .ConfigureServices(services => services
+                    .AddSingleton(fakeTgsRepository)));
+
+        var httpClient = smsServiceHost.CreateClient();
+        var sut = new SmsServiceClient(smsServiceHost.CreateClient());
+
+        var brandId = Guid.NewGuid();
+        var smsSettingId = Guid.NewGuid();
+
+        // Act
+        await sut.RemoveBrandSmsAsyncAsync(brandId, smsSettingId);
+
+        // Assert
+        _ = fakeTgsRepository.Received(1)
+            .RemoveBrandSmsAsync(
+                Arg.Is(brandId),
+                Arg.Is(smsSettingId),
+                Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task 查詢全部簡訊設定()
+    {
+        // Arrange
+        var fakeTgsRepository = Substitute.For<ITgsRepository>();
+
+        var smsServiceHost = SmsServiceTestHost.Factory
+            .WithWebHostBuilder(webBuilder => webBuilder
+                .ConfigureServices(services => services
+                    .AddSingleton(fakeTgsRepository)));
+
+        var httpClient = smsServiceHost.CreateClient();
+        var sut = new SmsServiceClient(smsServiceHost.CreateClient());
+        var brandId = Guid.NewGuid();
+
+        fakeTgsRepository
+            .QueryBrandSmsListAsync(Arg.Is(brandId), Arg.Any<CancellationToken>())
+            .Returns(new Tgs.SmsService.SmsSettingInfo[]
+            {
+                new Tgs.SmsService.SmsSettingInfo
+                {
+                    SmsSettingId = Guid.NewGuid(),
+                    Name = "name",
+                    Code = "code",
+                    Setting = JsonDocument.Parse("{}")
+                },
+                new Tgs.SmsService.SmsSettingInfo
+                {
+                    SmsSettingId = Guid.NewGuid(),
+                    Name = "name2",
+                    Code = "code2",
+                    Setting = JsonDocument.Parse("{}")
+                },
+            }.ToAsyncEnumerable());
+
+        // Act
+        var actual = await sut.QueryBrandSmsListAsync(brandId).ToArrayAsync();
+
+        // Assert
+        Assert.Equal(2, actual.Length);
+    }
+
+    [Fact]
+    public async Task 套用平台簡訊設定()
+    {
+        // Arrange
+        var fakeTgsRepository = Substitute.For<ITgsRepository>();
+
+        var smsServiceHost = SmsServiceTestHost.Factory
+            .WithWebHostBuilder(webBuilder => webBuilder
+                .ConfigureServices(services => services
+                    .AddSingleton(fakeTgsRepository)));
+
+        var httpClient = smsServiceHost.CreateClient();
+        var sut = new SmsServiceClient(smsServiceHost.CreateClient());
+
+        var brandId = Guid.NewGuid();
+        var smsSettingId = Guid.NewGuid();
+        var modifier = "test";
+
+        var smsSetting = new Tgs.SmsService.SmsSettingInfo
+        {
+            SmsSettingId = smsSettingId,
+            Code = "code",
+            Setting = JsonDocument.Parse("{}"),
+            Name = "name",
+        };
+
+        _ = fakeTgsRepository
+            .GetSmsSettingByIdAsync(Arg.Is(smsSettingId))
+            .Returns(smsSetting);
+
+        // Act
+        await sut.ApplyBrandSmsAsync(brandId, smsSettingId, modifier);
+
+        // Assert
+        _ = fakeTgsRepository.Received(1)
+            .ApplyBrandSmsAsync(
+                Arg.Is(brandId),
+                Arg.Is(smsSetting.Code),
+                Arg.Is(smsSetting.Setting),
+                Arg.Is(modifier),
+                Arg.Any<CancellationToken>());
+    }
+}

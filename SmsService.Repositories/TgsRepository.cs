@@ -27,4 +27,77 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
                 ? null
                 : JsonDocument.Parse(brand.SmsVendorSettings));
     }
+
+    public ValueTask AddSmsSettingAsync(
+        string name,
+        string code,
+        JsonDocument setting,
+        string modifier,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask UpdateSmsSettingAsync(
+        Guid smsSettingId,
+        string name,
+        string code,
+        JsonDocument setting,
+        string modifier,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask RemoveSmsSettingAsync(
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IAsyncEnumerable<SmsSettingInfo> GetSmsSettingsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask<SmsSettingInfo?> GetSmsSettingByIdAsync(
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask AddBrandSmsAsync(
+        Guid brandId,
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask RemoveBrandSmsAsync(
+        Guid brandId,
+        Guid smsSettingId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IAsyncEnumerable<SmsSettingInfo> QueryBrandSmsListAsync(
+        Guid brandId,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask ApplyBrandSmsAsync(
+        Guid brandId,
+        string vendorCode,
+        JsonDocument vendorSetting,
+        string modifier,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }
