@@ -10,7 +10,7 @@ namespace SmsService.Core.UnitTests;
 public class SmsSettingTests
 {
     [Test]
-    public async Task 新增簡訊設定()
+    public async Task AddSmsSettingCommandService_新增簡訊設定()
     {
         // Arrange
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
@@ -37,7 +37,7 @@ public class SmsSettingTests
     }
 
     [Test]
-    public async Task 修改簡訊設定()
+    public async Task UpdateSmsSettingCommandService_修改簡訊設定()
     {
         // Arrange
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
@@ -66,7 +66,7 @@ public class SmsSettingTests
     }
 
     [Test]
-    public async Task 移除簡訊設定()
+    public async Task RemoveSmsSettingCommandService_移除簡訊設定()
     {
         // Arrange
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
@@ -84,7 +84,7 @@ public class SmsSettingTests
     }
 
     [Test]
-    public async Task 查詢全部簡訊設定()
+    public async Task GetSmsSettingsQueryService_查詢全部簡訊設定()
     {
         // Arrange
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
@@ -100,7 +100,7 @@ public class SmsSettingTests
     }
 
     [Test]
-    public async Task 查詢簡訊設定()
+    public async Task GetSmsSettingQueryService_查詢簡訊設定()
     {
         // Arrange
         var fakeTgsRepository = Substitute.For<ITgsRepository>();

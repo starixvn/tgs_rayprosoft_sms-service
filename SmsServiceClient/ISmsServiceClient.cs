@@ -27,7 +27,7 @@ public interface ISmsServiceClient
         CancellationToken cancellationToken = default);
 
     ValueTask UpdateSmsSettingAsync(
-        Guid SmsSettingId,
+        Guid smsSettingId,
         string name,
         string code,
         JsonDocument setting,
@@ -35,6 +35,26 @@ public interface ISmsServiceClient
         CancellationToken cancellationToken = default);
 
     ValueTask RemoveSmsSettingAsync(
-        Guid SmsSettingId,
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default);
+
+    ValueTask AddBrandSmsAsync(
+        Guid brandId,
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default);
+
+    ValueTask RemoveBrandSmsAsyncAsync(
+        Guid brandId,
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<BrandSmsInfo> QueryBrandSmsListAsync(
+        Guid brandId,
+        CancellationToken cancellationToken = default);
+
+    ValueTask ApplyBrandSmsAsync(
+        Guid brandId,
+        Guid smsSettingId,
+        string modifier,
         CancellationToken cancellationToken = default);
 }

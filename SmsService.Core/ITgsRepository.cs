@@ -31,4 +31,24 @@ public interface ITgsRepository
     public ValueTask<SmsSettingInfo?> GetSmsSettingByIdAsync(
         Guid smsSettingId,
         CancellationToken cancellationToken = default);
+
+    public ValueTask AddBrandSmsAsync(
+        Guid brandId,
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default);
+
+    public ValueTask RemoveBrandSmsAsync(
+        Guid brandId,
+        Guid smsSettingId,
+        CancellationToken cancellationToken = default);
+
+    public IAsyncEnumerable<BrandSmsInfo> QueryBrandSmsListAsync(
+        Guid brandId,
+        CancellationToken cancellationToken = default);
+
+    public ValueTask ApplyBrandSmsAsync(
+        Guid brandId,
+        Guid smsSettingId,
+        string modifier,
+        CancellationToken cancellationToken = default);
 }

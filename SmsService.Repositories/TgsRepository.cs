@@ -28,32 +28,17 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
                 : JsonDocument.Parse(brand.SmsVendorSettings));
     }
 
-    public async ValueTask AddSmsSettingAsync(
+    public ValueTask AddSmsSettingAsync(
         string name,
         string code,
         JsonDocument setting,
         string modifier,
         CancellationToken cancellationToken = default)
     {
-        var brandSetting = new SmsSetting
-        {
-            Name = name,
-            Code = code,
-            Setting = JsonSerializer.Serialize(setting),
-            UpdatedByUsername = modifier,
-            UpdatedOn = DateTime.UtcNow,
-        };
-
-        _ = await _tgsContext.SmsSettings
-            .AddAsync(brandSetting, cancellationToken)
-            .ConfigureAwait(false);
-
-        _ = await _tgsContext
-            .SaveChangesAsync(cancellationToken)
-            .ConfigureAwait(false);
+        throw new NotImplementedException();
     }
 
-    public async ValueTask UpdateSmsSettingAsync(
+    public ValueTask UpdateSmsSettingAsync(
         Guid smsSettingId,
         string name,
         string code,
@@ -61,73 +46,57 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
         string modifier,
         CancellationToken cancellationToken = default)
     {
-        var smsSetting = await _tgsContext.SmsSettings
-            .FindAsync([smsSettingId], cancellationToken)
-            .ConfigureAwait(false);
-
-        if (smsSetting is null)
-            return;
-
-        smsSetting.Name = name;
-        smsSetting.Code = code;
-        smsSetting.Setting = JsonSerializer.Serialize(setting);
-        smsSetting.UpdatedByUsername = modifier;
-        smsSetting.UpdatedOn = DateTime.UtcNow;
-
-        _ = await _tgsContext
-            .SaveChangesAsync(cancellationToken)
-            .ConfigureAwait(false);
+        throw new NotImplementedException();
     }
 
-    public async ValueTask RemoveSmsSettingAsync(
+    public ValueTask RemoveSmsSettingAsync(
         Guid smsSettingId,
         CancellationToken cancellationToken = default)
     {
-        var smsSetting = await _tgsContext.SmsSettings
-            .FindAsync([smsSettingId], cancellationToken)
-            .ConfigureAwait(false);
-
-        if (smsSetting is null)
-            return;
-
-        _ = _tgsContext.SmsSettings.Remove(smsSetting);
-
-        _ = await _tgsContext
-            .SaveChangesAsync(cancellationToken)
-            .ConfigureAwait(false);
+        throw new NotImplementedException();
     }
 
-    public IAsyncEnumerable<SmsSettingInfo> GetSmsSettingsAsync(CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<SmsSettingInfo> GetSmsSettingsAsync(
+        CancellationToken cancellationToken = default)
     {
-        var smsSettings = _tgsContext.SmsSettings
-            .ToAsyncEnumerable();
-
-        return smsSettings.Select(x => new SmsSettingInfo
-        {
-            SmsSettingId = x.Id,
-            Name = x.Name,
-            Code = x.Code,
-            Setting = JsonDocument.Parse(x.Setting)
-        }).AsAsyncEnumerable();
+        throw new NotImplementedException();
     }
 
-    public async ValueTask<SmsSettingInfo?> GetSmsSettingByIdAsync(
+    public ValueTask<SmsSettingInfo?> GetSmsSettingByIdAsync(
         Guid smsSettingId,
         CancellationToken cancellationToken = default)
     {
-        var smsSetting = await _tgsContext.SmsSettings
-            .FindAsync([smsSettingId], cancellationToken)
-            .ConfigureAwait(false);
+        throw new NotImplementedException();
+    }
 
-        if (smsSetting is null)
-            return null;
+    public ValueTask AddBrandSmsAsync(
+        Guid brandId, 
+        Guid smsSettingId, 
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 
-        return new SmsSettingInfo
-        {
-            SmsSettingId = smsSetting.Id,
-            Name = smsSetting.Name,
-            Code = smsSetting.Code,
-            Setting = JsonDocument.Parse(smsSetting.Setting)
-        };
+    public ValueTask RemoveBrandSmsAsync(
+        Guid brandId, 
+        Guid smsSettingId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IAsyncEnumerable<BrandSmsInfo> QueryBrandSmsListAsync(
+        Guid brandId, 
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask ApplyBrandSmsAsync(
+        Guid brandId, 
+        Guid smsSettingId, 
+        string modifier, 
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }
