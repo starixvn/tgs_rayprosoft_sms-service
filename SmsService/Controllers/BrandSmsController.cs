@@ -32,7 +32,7 @@ public class BrandSmsController : ControllerBase
 
     [HttpGet("list/{brandId:Guid}", Name = "QueryBrandSmsList")]
     public IAsyncEnumerable<BrandSmsViewModel> QueryBrandSmsListAsync(
-        [FromServices] IQueryService<GetBrandSmsQuery, BrandSmsInfo> queryService,
+        [FromServices] IQueryService<GetBrandSmsQuery, SmsSettingInfo> queryService,
         Guid brandId)
     {
         var query = new GetBrandSmsQuery(brandId);
@@ -41,8 +41,8 @@ public class BrandSmsController : ControllerBase
             .QueryAsync(query, HttpContext.RequestAborted)
             .Select(x => new BrandSmsViewModel
             {
-                BrandId = brandId,
                 SmsSettingId = x.SmsSettingId,
+                SmsSettingName = x.Name,
             });
     }
 

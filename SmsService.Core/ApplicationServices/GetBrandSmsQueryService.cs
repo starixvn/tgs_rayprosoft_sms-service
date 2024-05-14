@@ -3,8 +3,8 @@
 namespace Tgs.SmsService.ApplicationServices;
 
 internal class GetBrandSmsQueryService(ITgsRepository repository)
-    : IQueryService<GetBrandSmsQuery, BrandSmsInfo>
+    : IQueryService<GetBrandSmsQuery, SmsSettingInfo>
 {
-    public IAsyncEnumerable<BrandSmsInfo> QueryAsync(GetBrandSmsQuery query, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<SmsSettingInfo> QueryAsync(GetBrandSmsQuery query, CancellationToken cancellationToken = default)
         => repository.QueryBrandSmsListAsync(query.BrandId, cancellationToken);
 }

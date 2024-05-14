@@ -42,7 +42,7 @@ public interface ITgsRepository
         Guid smsSettingId,
         CancellationToken cancellationToken = default);
 
-    public IAsyncEnumerable<BrandSmsInfo> QueryBrandSmsListAsync(
+    public IAsyncEnumerable<SmsSettingInfo> QueryBrandSmsListAsync(
         Guid brandId,
         CancellationToken cancellationToken = default);
 

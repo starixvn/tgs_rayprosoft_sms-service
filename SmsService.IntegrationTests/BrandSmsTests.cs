@@ -78,14 +78,31 @@ public class BrandSmsTests
         var sut = new SmsServiceClient(smsServiceHost.CreateClient());
         var brandId = Guid.NewGuid();
 
+        fakeTgsRepository
+            .QueryBrandSmsListAsync(Arg.Is(brandId), Arg.Any<CancellationToken>())
+            .Returns(new Tgs.SmsService.SmsSettingInfo[]
+            {
+                new Tgs.SmsService.SmsSettingInfo
+                {
+                    SmsSettingId = Guid.NewGuid(),
+                    Name = "name",
+                    Code = "code",
+                    Setting = JsonDocument.Parse("{}")
+                },
+                new Tgs.SmsService.SmsSettingInfo
+                {
+                    SmsSettingId = Guid.NewGuid(),
+                    Name = "name2",
+                    Code = "code2",
+                    Setting = JsonDocument.Parse("{}")
+                },
+            }.ToAsyncEnumerable());
+
         // Act
-        _ = await sut.QueryBrandSmsListAsync(brandId).ToArrayAsync();
+        var actual = await sut.QueryBrandSmsListAsync(brandId).ToArrayAsync();
 
         // Assert
-        _ = fakeTgsRepository.Received(1)
-            .QueryBrandSmsListAsync(
-                Arg.Is(brandId),
-                Arg.Any<CancellationToken>());
+        Assert.Equal(2, actual.Length);
     }
 
     [Fact]

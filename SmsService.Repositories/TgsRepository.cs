@@ -84,7 +84,7 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
         throw new NotImplementedException();
     }
 
-    public IAsyncEnumerable<BrandSmsInfo> QueryBrandSmsListAsync(
+    public IAsyncEnumerable<SmsSettingInfo> QueryBrandSmsListAsync(
         Guid brandId,
         CancellationToken cancellationToken = default)
     {
