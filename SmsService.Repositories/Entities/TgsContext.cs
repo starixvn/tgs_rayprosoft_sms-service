@@ -20,6 +20,7 @@ namespace Tgs.Sms.Repositories.Entities
         }
 
         public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<SmsSetting> SmsSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,7 @@ namespace Tgs.Sms.Repositories.Entities
                 .HasAnnotation("Relational:Collation", "en_US.utf8");
 
             modelBuilder.ApplyConfiguration(new Configurations.BrandConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.SmsSettingConfiguration());
             OnModelCreatingPartial(modelBuilder);
         }
 

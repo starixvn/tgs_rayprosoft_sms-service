@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using NSubstitute;
-using Tgs.SmsService;
-using Xunit;
+﻿using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
+using Tgs.SmsService;
 using TGS.SmsService.Client;
 
 namespace SmsService.IntegrationTests;
+
 public class SendMessageTests
 {
     [Fact]
@@ -49,5 +43,5 @@ public class SendMessageTests
                 Arg.Is("test"),
                 Arg.Any<ShortMessageData>(),
                 Arg.Any<CancellationToken>());
-    }
+    }    
 }
