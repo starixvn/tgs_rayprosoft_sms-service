@@ -19,16 +19,14 @@ namespace Tgs.Sms.Repositories.Entities
         {
         }
 
-        public virtual DbSet<Brand> Brands { get; set; }
-        public virtual DbSet<SmsSetting> SmsSettings { get; set; }
+        public virtual DbSet<Brand> Brands { get; set; }        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("pg_trgm")
                 .HasAnnotation("Relational:Collation", "en_US.utf8");
 
-            modelBuilder.ApplyConfiguration(new Configurations.BrandConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.SmsSettingConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.BrandConfiguration());            
             OnModelCreatingPartial(modelBuilder);
         }
 

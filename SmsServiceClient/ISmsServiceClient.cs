@@ -15,10 +15,6 @@ public interface ISmsServiceClient
     IAsyncEnumerable<SmsSettingInfo> QuerySmsSettingListAsync(
         CancellationToken cancellationToken = default);
 
-    ValueTask<SmsSettingInfo?> GetSmsSettingAsync(
-        Guid SmsSettingId,
-        CancellationToken cancellationToken = default);
-
     ValueTask AddSmsSettingAsync(
         string name,
         string code,

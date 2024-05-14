@@ -64,27 +64,4 @@ public class SmsSettingController : ControllerBase
                 Setting = x.Setting,
             });
     }
-
-    [HttpGet("{smsSettingId:Guid}", Name = "GetSmsSetting")]
-    public async ValueTask<SmsSettingViewModel?> GetSmsSettingAsync(
-        [FromServices] IGetService<GetSmsSettingQuery,SmsSettingInfo?> getService,
-        Guid smsSettingId)
-    {
-        var query = new GetSmsSettingQuery(smsSettingId);
-
-        var result = await getService
-            .GetAsync(query, HttpContext.RequestAborted)
-            .ConfigureAwait(false);
-            
-        if (result == null)
-            return null;
-
-        return new SmsSettingViewModel
-        {
-            SmsSettingId = result.SmsSettingId,
-            Name = result.Name,
-            Code = result.Code,
-            Setting = result.Setting,
-        };
-    }
 }

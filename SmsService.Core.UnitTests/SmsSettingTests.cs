@@ -98,21 +98,4 @@ public class SmsSettingTests
         _ = fakeTgsRepository.Received(1)
             .GetSmsSettingsAsync();
     }
-
-    [Test]
-    public async Task GetSmsSettingQueryService_查詢簡訊設定()
-    {
-        // Arrange
-        var fakeTgsRepository = Substitute.For<ITgsRepository>();
-        var sut = new GetSmsSettingQueryService(fakeTgsRepository);
-
-        var id = Guid.NewGuid();
-        var command = new GetSmsSettingQuery(id);
-        // Act
-        await sut.GetAsync(command);
-
-        // Assert
-        _ = fakeTgsRepository.Received(1)
-            .GetSmsSettingByIdAsync(Arg.Is(id));
-    }
 }

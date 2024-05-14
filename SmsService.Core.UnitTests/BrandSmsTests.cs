@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System.Text.Json;
+using NSubstitute;
 using NUnit.Framework;
 using Tgs.SmsService;
 using Tgs.SmsService.ApplicationServices;
@@ -80,7 +81,20 @@ public class BrandSmsTests
         var smsSettingId = Guid.NewGuid();
         var modifier = "test";
 
+        var smsSetting = new SmsSettingInfo
+        {
+            SmsSettingId = smsSettingId,
+            Code = "code",
+            Setting = JsonDocument.Parse("{}"),
+            Name = "name",
+        };
+
+        _ = fakeTgsRepository
+            .GetSmsSettingByIdAsync(Arg.Is(smsSettingId))
+            .Returns(smsSetting);
+
         var command = new ApplyBrandSmsCommand(brandId, smsSettingId, modifier);
+
         // Act
         await sut.ExecuteAsync(command);
 
@@ -88,7 +102,8 @@ public class BrandSmsTests
         _ = fakeTgsRepository.Received(1)
             .ApplyBrandSmsAsync(
                 Arg.Is(brandId),
-                Arg.Is(smsSettingId),
+                Arg.Is(smsSetting.Code),
+                Arg.Is(smsSetting.Setting),
                 Arg.Is(modifier));
     }
 }

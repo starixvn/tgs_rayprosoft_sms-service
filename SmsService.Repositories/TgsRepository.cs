@@ -70,31 +70,32 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
     }
 
     public ValueTask AddBrandSmsAsync(
-        Guid brandId, 
-        Guid smsSettingId, 
+        Guid brandId,
+        Guid smsSettingId,
         CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
     public ValueTask RemoveBrandSmsAsync(
-        Guid brandId, 
+        Guid brandId,
         Guid smsSettingId, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
     public IAsyncEnumerable<BrandSmsInfo> QueryBrandSmsListAsync(
-        Guid brandId, 
+        Guid brandId,
         CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
     public ValueTask ApplyBrandSmsAsync(
-        Guid brandId, 
-        Guid smsSettingId, 
-        string modifier, 
+        Guid brandId,
+        string vendorCode,
+        JsonDocument vendorSetting,
+        string modifier,
         CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();

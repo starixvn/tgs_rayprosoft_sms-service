@@ -2,10 +2,10 @@
 
 namespace TGS.SmsService.ViewModels;
 
-public record SmsSettingRequest
+public class SmsSettingRequest
 {
-    public string Name { get; set; } = default!;
-    public string Code { get; set; } = default!;
+    public required string Name { get; set; }
+    public required string Code { get; set; }
 
-    public JsonDocument Setting { get; set; } = default!;
+    public required JsonDocument Setting { get; set; }
 }

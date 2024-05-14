@@ -100,30 +100,6 @@ public class SmsSettingTests
     }
 
     [Fact]
-    public async Task 查詢簡訊設定()
-    {
-        // Arrange
-        var fakeTgsRepository = Substitute.For<ITgsRepository>();
-
-        var smsServiceHost = SmsServiceTestHost.Factory
-            .WithWebHostBuilder(webBuilder => webBuilder
-                .ConfigureServices(services => services
-                    .AddSingleton(fakeTgsRepository)));
-
-        var httpClient = smsServiceHost.CreateClient();
-        var sut = new SmsServiceClient(smsServiceHost.CreateClient());
-
-        var id = Guid.NewGuid();
-
-        // Act
-        _ = await sut.GetSmsSettingAsync(id);
-
-        // Assert
-        _ = fakeTgsRepository.Received(1)
-            .GetSmsSettingByIdAsync(Arg.Is(id), Arg.Any<CancellationToken>());
-    }
-
-    [Fact]
     public async Task 查詢全部簡訊設定()
     {
         // Arrange

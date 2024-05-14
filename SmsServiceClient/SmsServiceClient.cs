@@ -86,26 +86,7 @@ internal class SmsServiceClient : ISmsServiceClient
             cancellationToken).ConfigureAwait(false);
 
         _ = response.EnsureSuccessStatusCode();
-    }
-
-    public async ValueTask<SmsSettingInfo?> GetSmsSettingAsync(
-        Guid smsSettingId,
-        CancellationToken cancellationToken = default)
-    {
-        var response = await _httpClient
-            .GetAsync($"/api/sms-setting/{smsSettingId}", cancellationToken)
-            .ConfigureAwait(false);
-
-        _ = response.EnsureSuccessStatusCode();
-
-        var json = await response.Content
-            .ReadAsStringAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        return string.IsNullOrEmpty(json)
-            ? null
-            : JsonSerializer.Deserialize<SmsSettingInfo>(json, _JsonSerializerOptions);
-    }
+    }    
 
     public IAsyncEnumerable<BrandSmsInfo> QueryBrandSmsListAsync(
         Guid brandId, 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using Tgs.SmsService;
 using TGS.SmsService.Client;
 
@@ -105,6 +106,18 @@ public class BrandSmsTests
         var smsSettingId = Guid.NewGuid();
         var modifier = "test";
 
+        var smsSetting = new Tgs.SmsService.SmsSettingInfo
+        {
+            SmsSettingId = smsSettingId,
+            Code = "code",
+            Setting = JsonDocument.Parse("{}"),
+            Name = "name",
+        };
+
+        _ = fakeTgsRepository
+            .GetSmsSettingByIdAsync(Arg.Is(smsSettingId))
+            .Returns(smsSetting);
+
         // Act
         await sut.ApplyBrandSmsAsync(brandId, smsSettingId, modifier);
 
@@ -112,7 +125,8 @@ public class BrandSmsTests
         _ = fakeTgsRepository.Received(1)
             .ApplyBrandSmsAsync(
                 Arg.Is(brandId),
-                Arg.Is(smsSettingId),
+                Arg.Is(smsSetting.Code),
+                Arg.Is(smsSetting.Setting),
                 Arg.Is(modifier),
                 Arg.Any<CancellationToken>());
     }

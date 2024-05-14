@@ -2,10 +2,10 @@
 
 namespace TGS.SmsService.ViewModels;
 
-public record SmsSettingViewModel
+public class SmsSettingViewModel
 {
-    public Guid SmsSettingId { get; set; }
-    public string Name { get; set; } = default!;
-    public string Code { get; set; } = default!;
-    public JsonDocument Setting { get; set; } = default!;
+    public required Guid SmsSettingId { get; set; }
+    public required string Name { get; set; }
+    public required string Code { get; set; }
+    public required JsonDocument Setting { get; set; }
 }

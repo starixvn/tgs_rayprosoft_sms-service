@@ -48,7 +48,8 @@ public interface ITgsRepository
 
     public ValueTask ApplyBrandSmsAsync(
         Guid brandId,
-        Guid smsSettingId,
+        string vendorCode,
+        JsonDocument vendorSetting,
         string modifier,
         CancellationToken cancellationToken = default);
 }
