@@ -36,7 +36,7 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
         string modifier,
         CancellationToken cancellationToken = default)
     {
-        var brandSetting = new SmsSetting
+        var smsSetting = new SmsSetting
         {
             Name = name,
             Code = code,
@@ -46,7 +46,7 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
         };
 
         _ = await _tgsContext.SmsSettings
-            .AddAsync(brandSetting, cancellationToken)
+            .AddAsync(smsSetting, cancellationToken)
             .ConfigureAwait(false);
 
         _ = await _tgsContext
