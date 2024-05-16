@@ -15,4 +15,8 @@
     <ProjectReference Include="..\SmsService.Core\SmsService.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\Configurations\" />
+  </ItemGroup>
+
 </Project>

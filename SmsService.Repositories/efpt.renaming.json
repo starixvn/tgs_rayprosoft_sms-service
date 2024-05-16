@@ -1,0 +1,13 @@
+﻿[
+   {
+      "SchemaName": "dbo",
+      "Tables": [
+         {
+            "Columns": [ ],
+            "Name": "brand_sms",
+            "NewName": "BrandSmsRow"
+         }
+      ],
+      "UseSchemaName": false
+   }
+]
