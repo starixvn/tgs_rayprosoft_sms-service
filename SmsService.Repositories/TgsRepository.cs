@@ -35,9 +35,10 @@ internal class TgsRepository(TgsContext tgsContext) : ITgsRepository
         JsonDocument setting,
         string modifier,
         CancellationToken cancellationToken = default)
-    {
+    {        
         var smsSetting = new SmsSetting
         {
+            Id = Guid.NewGuid(),
             Name = name,
             Code = code,
             Setting = JsonSerializer.Serialize(setting),
