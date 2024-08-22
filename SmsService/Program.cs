@@ -97,9 +97,8 @@ builder.Services
 var excludeExtensions = new[] { "html", "ico", "png", "jpg" };
 builder.Services
     .AddOpenTelemetry()
-    .WithTracing(builder => builder
-        .SetResourceBuilder(ResourceBuilder.CreateDefault()
-            .AddEnvironmentVariableDetector())
+    .ConfigureResource(_ => _.AddService(builder.Configuration.GetValue<string>("Otel:ServiceName")))
+    .WithTracing(traceProviderBuilder => traceProviderBuilder
         .AddSource("Tgs.*")
         .AddSource("TGS.*")
         .AddSource("Valhalla.*")
@@ -114,7 +113,7 @@ builder.Services
                 ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
         .AddHttpClientInstrumentation()
         .AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true)
-        .AddOtlpExporter())
+        .AddOtlpExporter(options => options.Endpoint = builder.Configuration.GetValue<Uri>("Otel:Collector")))
     .WithMetrics(meterBuiler => meterBuiler
         .SetResourceBuilder(ResourceBuilder.CreateDefault()
             .AddEnvironmentVariableDetector())
